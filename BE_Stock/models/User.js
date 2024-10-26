@@ -21,6 +21,10 @@ const UserSchema = new mongoose.Schema({
         type: String, 
         default: 'user' 
     },  // phân quyền (user/admin)
+    dateOfBirth: {
+        type: Date,
+        required: true,
+    },
     resetPasswordToken: { 
         type: String 
     },  // Token để đặt lại mật khẩu

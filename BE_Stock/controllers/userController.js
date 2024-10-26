@@ -17,13 +17,18 @@ const transporter = nodemailer.createTransport({
 
 // Đăng ký
 exports.register = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, dateOfBirth } = req.body; // Thêm dateOfBirth
     
     try {
         // Kiểm tra xem người dùng đã tồn tại chưa
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({ msg: 'User already exists' });
+        }
+
+        // Kiểm tra định dạng ngày sinh
+        if (!dateOfBirth || isNaN(Date.parse(dateOfBirth))) {
+            return res.status(400).json({ msg: 'Invalid date of birth' });
         }
 
         // Mã hóa mật khẩu
@@ -35,6 +40,7 @@ exports.register = async (req, res) => {
             username,
             email,
             password: hashedPassword,
+            dateOfBirth: new Date(dateOfBirth), // Lưu trữ dưới dạng Date
         });
 
         await user.save();
@@ -166,7 +172,7 @@ exports.resetPassword = async (req, res) => {
 
 // Cập nhật thông tin người dùng
 exports.updateProfile = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, dateOfBirth } = req.body;
 
     try {
         const userId = req.user.id; // Middleware auth đã thêm user vào req.user
@@ -178,6 +184,12 @@ exports.updateProfile = async (req, res) => {
 
         if (username) user.username = username;
         if (email) user.email = email;
+        if (dateOfBirth) {
+            if (isNaN(Date.parse(dateOfBirth))) {
+                return res.status(400).json({ msg: 'Invalid date of birth' });
+            }
+            user.dateOfBirth = new Date(dateOfBirth);
+        }
         if (password) {
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(password, salt);
@@ -191,7 +203,7 @@ exports.updateProfile = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                
+                dateOfBirth: user.dateOfBirth,
             }
         });
     } catch (error) {
