@@ -1,0 +1,120 @@
+/* AIConsultingPage.module.css */
+
+.aiConsultingPage {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 60px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #f2f2f2;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    padding-top: 10px;
+}
+
+.menuButton {
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0;
+}
+
+.menuIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.mainContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: 60px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: calc(100% - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 20px;
+    z-index: 2;
+}
+
+.logo {
+    height: 50px;
+}
+
+.profileIcon {
+    font-size: 32px;
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0;
+    color: #60C987;
+    text-align: center;
+}
+
+.user {
+    color: #71CDB4;
+}
+
+.exclamation {
+    color: #45BAD1;
+}
+
+.chatInputContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #eaeaea;
+    border-radius: 30px;
+    padding: 10px 15px;
+    z-index: 3;
+}
+
+.chatInput {
+    flex: 1;
+    border: none;
+    background-color: #eaeaea;
+    font-size: 16px;
+    outline: none;
+    color: #333;
+    padding-left: 10px;
+}
+
+.sendButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.upArrowIcon {
+    width: 30px;
+    height: 30px;
+}

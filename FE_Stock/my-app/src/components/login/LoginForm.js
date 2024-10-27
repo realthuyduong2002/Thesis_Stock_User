@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../../assets/logo.png';
 import emailIcon from '../../assets/email.png';
 import passwordIcon from '../../assets/password.png';
-import './LoginForm.css';
+import '../login/LoginForm.css';
 
 const LoginForm = () => (
     <div className="login-form">
