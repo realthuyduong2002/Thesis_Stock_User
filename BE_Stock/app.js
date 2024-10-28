@@ -1,9 +1,8 @@
-// app.js
-
 require('dotenv').config(); // Load biến môi trường
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 
 // Import các route khác
@@ -16,6 +15,7 @@ const app = express();
 
 // Middleware để phân tích JSON
 app.use(express.json());
+app.use(cors()); 
 
 // Mount các routes trước khi kết nối tới DB và khởi động server
 app.use('/api/users', userRoutes);
@@ -26,19 +26,17 @@ app.use('/api/analysis', analysisRoutes);
 
 // Kết nối tới MongoDB sử dụng URI từ file .env
 mongoose.connect(process.env.MONGODB_URI)
-.then(() => {
-    console.log('MongoDB connected');
-
-    // Khởi động server sau khi kết nối thành công với DB
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+    .then(() => {
+        console.log('MongoDB connected');
+        const PORT = process.env.PORT || 4000;
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+        process.exit(1);
     });
-})
-.catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1); // Dừng server nếu không kết nối được với DB
-});
 
 // Middleware xử lý lỗi chung
 app.use((err, req, res, next) => {

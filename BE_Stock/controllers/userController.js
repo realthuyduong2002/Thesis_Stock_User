@@ -17,10 +17,9 @@ const transporter = nodemailer.createTransport({
 
 // Đăng ký
 exports.register = async (req, res) => {
-    const { username, email, password, dateOfBirth } = req.body; // Thêm dateOfBirth
-    
+    const { username, email, password, dateOfBirth } = req.body;
+
     try {
-        // Kiểm tra xem người dùng đã tồn tại chưa
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({ msg: 'User already exists' });
@@ -31,16 +30,14 @@ exports.register = async (req, res) => {
             return res.status(400).json({ msg: 'Invalid date of birth' });
         }
 
-        // Mã hóa mật khẩu
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Tạo user mới
         user = new User({
             username,
             email,
             password: hashedPassword,
-            dateOfBirth: new Date(dateOfBirth), // Lưu trữ dưới dạng Date
+            dateOfBirth: new Date(dateOfBirth),
         });
 
         await user.save();

@@ -1,7 +1,5 @@
 // models/User.js
 
-const mongoose = require('mongoose');
-
 const UserSchema = new mongoose.Schema({
     username: { 
         type: String, 
@@ -20,17 +18,17 @@ const UserSchema = new mongoose.Schema({
     role: { 
         type: String, 
         default: 'user' 
-    },  // phân quyền (user/admin)
+    },
     dateOfBirth: {
         type: Date,
         required: true,
     },
     resetPasswordToken: { 
         type: String 
-    },  // Token để đặt lại mật khẩu
+    },
     resetPasswordExpires: { 
         type: Date 
-    },  // Thời gian hết hạn của token
+    },
     createdAt: { 
         type: Date, 
         default: Date.now 
