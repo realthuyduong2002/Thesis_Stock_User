@@ -1,12 +1,15 @@
-/* AIConsultingPage.module.css */
+/* Import Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+/* Global Styles */
 .aiConsultingPage {
     display: flex;
     height: 100vh;
     background-color: #f5f5f5; /* Light background for the entire page */
+    font-family: 'Poppins', sans-serif;
 }
 
+/* Sidebar Styles */
 .sidebar {
     width: 60px;
     display: flex;
@@ -33,45 +36,63 @@
     height: 24px;
 }
 
+/* Main Content */
 .mainContent {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     margin-left: 60px;
     padding: 20px;
     position: relative;
     z-index: 1;
 }
 
+/* Header */
 .header {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: calc(100% - 80px);
+    position: fixed;
+    top: 0;
+    left: 60px;
+    width: calc(100% - 60px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-right: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
     z-index: 2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
     height: 50px;
 }
 
-.profileContainer {
-    position: relative;
+.navMenu {
+    display: flex;
+    gap: 20px; /* Space between links */
+    margin-left: auto; /* Push menu to the right */
+}
+
+.navLink {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navLink:hover {
+    color: #60C987; /* Change color on hover */
 }
 
 .profileIcon {
     font-size: 32px;
     cursor: pointer;
     color: #555;
-    margin-left: 20px; /* Khoảng cách giữa avatar và menu điều hướng */
+    margin-left: 20px; /* Space between avatar and navigation menu */
+    position: relative;
 }
 
+/* Profile Menu */
 .profileMenu {
     background-color: #ffffff;
     border-radius: 8px;
@@ -83,12 +104,6 @@
     right: 0;
     z-index: 1000;
     transition: opacity 0.3s ease;
-}
-
-.profileHeader {
-    padding-bottom: 16px;
-    border-bottom: 1px solid #e6e6e6;
-    margin-bottom: 16px;
 }
 
 .profileName {
@@ -119,6 +134,12 @@
     background-color: #b7eb8f;
 }
 
+.profileMenuOptions {
+    margin-top: 16px;
+    border-top: 1px solid #e6e6e6;
+    padding-top: 16px;
+}
+
 .profileMenuItem {
     display: flex;
     align-items: center;
@@ -133,7 +154,7 @@
     background-color: #f5f5f5;
 }
 
-.menuIcon {
+.profileMenuItem .menuIcon {
     width: 16px;
     height: 16px;
     margin-right: 8px;
@@ -148,6 +169,7 @@
     border: none;
     cursor: pointer;
     margin-top: 16px;
+    width: 100%;
     transition: background-color 0.3s ease;
 }
 
@@ -155,28 +177,110 @@
     background-color: #ffa39e;
 }
 
+/* Greeting */
 h1 {
     font-size: 40px;
     font-weight: bold;
     margin: 0;
     text-align: center;
+    margin-top: 100px; /* Adjust to push down below header */
 }
 
 .hello {
-    font-family: 'Poppins', sans-serif;
     color: #60C987;
 }
 
 .user {
-    font-family: 'Poppins', sans-serif;
     color: #71CDB4;
 }
 
 .exclamation {
-    font-family: 'Poppins', sans-serif;
     color: #45BAD1;
 }
 
+/* Message Container */
+.messagesContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 10px;
+    overflow-y: auto;
+    height: calc(100vh - 200px); /* Adjust based on header and input height */
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 120px; /* Adjust to push below header */
+    margin-bottom: 120px; /* Adjust to not overlap with input */
+}
+
+.message {
+    padding: 12px 16px;
+    margin: 5px 0;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+    white-space: pre-wrap; /* Preserve line breaks */
+}
+
+.userMessage {
+    align-self: flex-end;
+    background-color: #d1f7c4; /* Light green */
+    color: #00796b;
+}
+
+.botMessage {
+    align-self: flex-start;
+    background-color: #e1bee7; /* Light purple */
+    color: #4a148c;
+}
+
+/* Typing Indicator */
+.typingIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+}
+
+.typingIndicator span {
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #555;
+    border-radius: 50%;
+    animation: typing 1s infinite;
+}
+
+.typingIndicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typingIndicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0% {
+        opacity: 0.2;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.2;
+    }
+}
+
+.loading {
+    font-style: italic;
+    color: gray;
+    margin: 10px;
+    align-self: center;
+}
+
+/* Chat Input */
 .chatInputContainer {
     display: flex;
     align-items: center;
@@ -213,7 +317,6 @@ h1 {
     background-color: #fff;
 }
 
-
 .sendButton {
     background: none;
     border: none;
@@ -232,54 +335,10 @@ h1 {
 .upArrowIcon {
     width: 20px;
     height: 20px;
-    vertical-align: middle; /* Căn chỉnh icon theo chiều dọc */
+    vertical-align: middle; /* Align icon vertically */
     filter: invert(50%);
 }
 
 .sendButton:hover {
     background-color: #f0f0f0; /* Light gray background on hover */
-}
-
-.messagesContainer {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 80px; /* Đảm bảo không bị che khuất bởi thanh nhập */
-    padding: 10px;
-    box-sizing: border-box;
-    overflow-y: auto;
-}
-
-.message {
-    background-color: #e0f7fa;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    width: fit-content;
-    max-width: 70%;
-    word-wrap: break-word;
-}
-
-.userMessage {
-    background-color: #d1f7c4; /* Màu khác cho tin nhắn người dùng */
-    align-self: flex-end; /* Căn tin nhắn về phía bên phải */
-}
-
-.navMenu {
-    display: flex;
-    gap: 20px; /* Khoảng cách giữa các liên kết */
-    margin-left: auto; /* Đẩy menu sang phải */
-}
-
-.navLink {
-    text-decoration: none;
-    color: #333;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.navLink:hover {
-    color: #60C987; /* Thay đổi màu khi hover */
 }
