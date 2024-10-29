@@ -53,79 +53,86 @@ const SignupForm = () => {
     };
 
     return (
-        <div className="signup-form">
-            <img src={logo} alt="Stock Insight Logo" className="form-logo" />
-            <h2>Create a new Stock Insight account</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="input-container">
-                    <img src={usernameIcon} alt="Username Icon" className="input-icon" />
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-container">
-                    <img src={emailIcon} alt="Email Icon" className="input-icon" />
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-container">
-                    <img src={passwordIcon} alt="Password Icon" className="input-icon" />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-container">
-                    <img src={repeatPasswordIcon} alt="Repeat Password Icon" className="input-icon" />
-                    <input
-                        type="password"
-                        placeholder="Repeat your password"
-                        value={repeatPassword}
-                        onChange={(e) => setRepeatPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="dob-container">
-                    <label>Date of birth</label>
-                    <select name="month" required onChange={(e) => setMonth(e.target.value)}>
-                        <option value="">Month</option>
-                        {months.map((month, index) => (
-                            <option key={index} value={month}>{month}</option>
-                        ))}
-                    </select>
-                    <select name="day" required onChange={(e) => setDay(e.target.value)}>
-                        <option value="">Day</option>
-                        {days.map((day) => (
-                            <option key={day} value={day}>{day}</option>
-                        ))}
-                    </select>
-                    <select name="year" required onChange={(e) => setYear(e.target.value)}>
-                        <option value="">Year</option>
-                        {years.map((year) => (
-                            <option key={year} value={year}>{year}</option>
-                        ))}
-                    </select>
-                </div>
-                {error && <p className="error-message">{error}</p>}
-                {success && <p className="success-message">{success}</p>}
-                <p className="terms">
-                    By continuing, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.
-                </p>
-                <button type="submit">Next</button>
-            </form>
-            <p className="login-link">Already have an account? <a href="/login">Log in</a></p>
+        <div>
+            <div className="top-links">
+                <a href="/help">Help</a>
+                <a href="/terms">Terms</a>
+                <a href="/privacy">Privacy</a>
+            </div>
+            <div className="signup-form">
+                <img src={logo} alt="Stock Insight Logo" className="form-logo" />
+                <h2>Create a new Stock Insight account</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="input-container">
+                        <img src={usernameIcon} alt="Username Icon" className="input-icon" />
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-container">
+                        <img src={emailIcon} alt="Email Icon" className="input-icon" />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-container">
+                        <img src={passwordIcon} alt="Password Icon" className="input-icon" />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input-container">
+                        <img src={repeatPasswordIcon} alt="Repeat Password Icon" className="input-icon" />
+                        <input
+                            type="password"
+                            placeholder="Repeat your password"
+                            value={repeatPassword}
+                            onChange={(e) => setRepeatPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="dob-container">
+                        <label>Date of birth</label>
+                        <select name="month" required onChange={(e) => setMonth(e.target.value)}>
+                            <option value="">Month</option>
+                            {months.map((month, index) => (
+                                <option key={index} value={month}>{month}</option>
+                            ))}
+                        </select>
+                        <select name="day" required onChange={(e) => setDay(e.target.value)}>
+                            <option value="">Day</option>
+                            {days.map((day) => (
+                                <option key={day} value={day}>{day}</option>
+                            ))}
+                        </select>
+                        <select name="year" required onChange={(e) => setYear(e.target.value)}>
+                            <option value="">Year</option>
+                            {years.map((year) => (
+                                <option key={year} value={year}>{year}</option>
+                            ))}
+                        </select>
+                    </div>
+                    {error && <p className="error-message">{error}</p>}
+                    {success && <p className="success-message">{success}</p>}
+                    <p className="terms">
+                        By continuing, you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.
+                    </p>
+                    <button type="submit">Next</button>
+                </form>
+                <p className="login-link">Already have an account? <a href="/login">Log in</a></p>
+            </div>
         </div>
     );
 };

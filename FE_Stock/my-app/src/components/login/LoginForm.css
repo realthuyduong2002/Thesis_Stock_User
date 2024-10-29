@@ -1,4 +1,6 @@
 /* LoginForm.css */
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&display=swap');
+
 
 .login-form {
     max-width: 400px;
@@ -7,13 +9,14 @@
 }
 
 .form-logo {
-    width: 120px;
-    margin-bottom: 20px;
+    width: 150px;
+    margin-bottom: 15px;
 }
 
 h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 25px;
+    font-family: 'Inria Serif', serif;
 }
 
 .input-container {
@@ -41,16 +44,16 @@ input[type="password"] {
 }
 
 button {
-    width: 100%;
+    width: 80%;
     padding: 10px;
-    border-radius: 5px;
-    background-color: #28a745;
-    color: #fff;
+    border-radius: 70px;
+    background-color: #C5F3C3;
+    color: #000000;
     font-size: 16px;
     font-weight: bold;
     border: none;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 button:hover {
@@ -61,7 +64,7 @@ button:hover {
 .register-link {
     font-size: 14px;
     color: #555;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .forgot-password a {

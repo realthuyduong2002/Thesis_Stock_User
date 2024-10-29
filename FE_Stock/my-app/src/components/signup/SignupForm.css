@@ -1,7 +1,7 @@
 /* SignupForm.css */
 
 .signup-form {
-    max-width: 400px;
+    max-width: 500px;
     background-color: #fff;
     padding: 30px;
     margin: 50px auto;
@@ -75,7 +75,7 @@ input[type="password"] {
 }
 
 button {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     border-radius: 5px;
     background-color: #28a745;
@@ -99,4 +99,21 @@ button:hover {
 
 .login-link a {
     color: #007bff;
+}
+
+.top-links {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+.top-links a {
+    color: #28a745;
+    margin-left: 15px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.top-links a:hover {
+    text-decoration: underline;
 }
