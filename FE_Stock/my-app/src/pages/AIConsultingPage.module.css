@@ -1,4 +1,5 @@
 /* AIConsultingPage.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 .aiConsultingPage {
     display: flex;
@@ -60,33 +61,127 @@
     height: 50px;
 }
 
+.profileContainer {
+    position: relative;
+}
+
 .profileIcon {
     font-size: 32px;
     cursor: pointer;
     color: #555;
+    margin-left: 20px; /* Khoảng cách giữa avatar và menu điều hướng */
+}
+
+.profileMenu {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    width: 220px;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+.profileHeader {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e6e6e6;
+    margin-bottom: 16px;
+}
+
+.profileName {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.profileEmail {
+    font-size: 14px;
+    color: #777;
+}
+
+.manageAccount {
+    display: block;
+    background-color: #d9f7be;
+    color: #333;
+    border: none;
+    padding: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.manageAccount:hover {
+    background-color: #b7eb8f;
+}
+
+.profileMenuItem {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.profileMenuItem:hover {
+    background-color: #f5f5f5;
+}
+
+.menuIcon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.logout {
+    color: #ff4d4f;
+    text-align: center;
+    padding: 8px 0;
+    background-color: #fff2f0;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.logout:hover {
+    background-color: #ffa39e;
 }
 
 h1 {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: bold;
     margin: 0;
-    color: #333;
     text-align: center;
 }
 
-.user {
+.hello {
+    font-family: 'Poppins', sans-serif;
     color: #60C987;
 }
 
+.user {
+    font-family: 'Poppins', sans-serif;
+    color: #71CDB4;
+}
+
 .exclamation {
-    color: #60C987;
+    font-family: 'Poppins', sans-serif;
+    color: #45BAD1;
 }
 
 .chatInputContainer {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 800px; /* Adjust as needed for desired width */
+    max-width: 800px;
     position: fixed;
     bottom: 20px;
     left: 50%;
@@ -94,7 +189,7 @@ h1 {
     background-color: #fff;
     border-radius: 30px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 8px 12px;
+    padding: 5px 16px;
     z-index: 3;
 }
 
@@ -103,19 +198,21 @@ h1 {
     border: none;
     background-color: transparent;
     font-size: 16px;
+    line-height: 1.5;
     outline: none;
     color: #333;
-    padding: 8px;
+    padding: 10px;
     resize: none;
     max-height: 120px;
     overflow-y: auto;
-    margin-right: 10px; /* Space between input and send button */
+    margin-right: 10px;
 }
 
 .chatInput:focus {
     border-color: #60C987;
     background-color: #fff;
 }
+
 
 .sendButton {
     background: none;
@@ -124,19 +221,65 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+    line-height: 0;
     border-radius: 50%;
-    padding: 5px;
+    padding: 0;
     transition: background-color 0.2s ease;
+}
+
+.upArrowIcon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle; /* Căn chỉnh icon theo chiều dọc */
+    filter: invert(50%);
 }
 
 .sendButton:hover {
     background-color: #f0f0f0; /* Light gray background on hover */
 }
 
-.upArrowIcon {
-    width: 16px;
-    height: 16px;
-    filter: invert(50%);
+.messagesContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 80px; /* Đảm bảo không bị che khuất bởi thanh nhập */
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.message {
+    background-color: #e0f7fa;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: fit-content;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+.userMessage {
+    background-color: #d1f7c4; /* Màu khác cho tin nhắn người dùng */
+    align-self: flex-end; /* Căn tin nhắn về phía bên phải */
+}
+
+.navMenu {
+    display: flex;
+    gap: 20px; /* Khoảng cách giữa các liên kết */
+    margin-left: auto; /* Đẩy menu sang phải */
+}
+
+.navLink {
+    text-decoration: none;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.navLink:hover {
+    color: #60C987; /* Thay đổi màu khi hover */
 }
