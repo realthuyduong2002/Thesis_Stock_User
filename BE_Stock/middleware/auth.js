@@ -1,31 +1,23 @@
 // middleware/auth.js
 
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 
-const auth = async (req, res, next) => {
+module.exports = function (req, res, next) {
+    // Get token from header
     const authHeader = req.header('Authorization');
 
-    if (!authHeader) {
-        return res.status(401).json({ msg: 'Không có token, truy cập bị từ chối' });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
     const token = authHeader.replace('Bearer ', '');
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.user.id).select('-password');
-
-        if (!user) {
-            return res.status(401).json({ msg: 'Người dùng không tồn tại' });
-        }
-
-        req.user = user; // Đính kèm đối tượng người dùng vào req.user
+        req.user = decoded.user;
         next();
     } catch (err) {
-        console.error('Lỗi xác thực JWT:', err);
-        res.status(401).json({ msg: 'Token không hợp lệ' });
+        console.error('Token verification failed:', err);
+        res.status(401).json({ msg: 'Token is not valid' });
     }
 };
-
-module.exports = auth;

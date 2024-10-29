@@ -24,6 +24,36 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
+    firstName: {
+        type: String,
+        default: '',
+        required: false,
+    },
+    lastName: {
+        type: String,
+        default: '',
+        required: false,
+    },
+    preferredName: {
+        type: String,
+        default: '',
+        required: false,
+    },
+    gender: {
+        type: String,
+        enum: ['Male', 'Female', 'Other'],
+        required: false,
+    },
+    phoneNumber: {
+        type: String,
+        default: '',
+        required: false,
+    },
+    country: {
+        type: String,
+        default: '',
+        required: false,
+    },
     resetPasswordToken: { 
         type: String 
     },

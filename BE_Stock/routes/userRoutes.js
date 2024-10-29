@@ -8,23 +8,22 @@ const {
     login,
     forgotPassword,
     resetPassword,
-    updateProfile
+    updateProfile,
+    getProfile,
+    getUserById,
 } = require('../controllers/userController');
 
-
-// Đăng ký tài khoản (không yêu cầu xác thực)
+// Public routes
 router.post('/register', register);
-
-// Đăng nhập (không yêu cầu xác thực)
 router.post('/login', login);
-
-// Quên mật khẩu (không yêu cầu xác thực)
 router.post('/forgot-password', forgotPassword);
-
-// Đặt lại mật khẩu (không yêu cầu xác thực)
 router.post('/reset-password', resetPassword);
 
-// Cập nhật thông tin người dùng (yêu cầu xác thực)
+// Protected routes
+router.get('/me', auth, getProfile);
 router.put('/update', auth, updateProfile);
+
+// Get user by ID (public)
+router.get('/:id', getUserById);
 
 module.exports = router;

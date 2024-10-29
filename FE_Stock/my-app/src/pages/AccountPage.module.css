@@ -1,0 +1,136 @@
+.accountPage {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.logo {
+    height: 40px;
+}
+
+.searchContainer {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-left: 20px;
+}
+
+.searchBar {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+}
+
+.searchIcon {
+    margin-left: 10px;
+    color: #666;
+}
+
+.profileIcon {
+    position: relative;
+}
+
+.avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px;
+}
+
+.navLink {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 500;
+}
+
+.navLink:hover {
+    text-decoration: underline;
+}
+
+.mainContent {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.infoContainer {
+    display: flex;
+    gap: 40px;
+}
+
+.details {
+    flex: 1;
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.details h3 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.profileSettings {
+    flex: 1;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fafafa;
+    margin-bottom: 20px;
+}
+
+.avatarLarge {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.updateLink {
+    color: #007bff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.updateLink:hover {
+    text-decoration: underline;
+}
+
+.language {
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+}

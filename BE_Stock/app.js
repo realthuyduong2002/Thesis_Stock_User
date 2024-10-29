@@ -39,6 +39,7 @@ mongoose.connect(process.env.MONGODB_URI)
     });
 
 // Middleware xử lý lỗi chung
+// Middleware to handle errors
 app.use((err, req, res, next) => {
     console.error('Unhandled Error:', err.stack);
     res.status(500).send('Something broke!');

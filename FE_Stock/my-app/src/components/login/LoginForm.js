@@ -14,19 +14,25 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-        });
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/users/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
 
-        const data = await response.json();
-        if (response.ok) {
-            alert('Login successful');
-            localStorage.setItem('token', data.token); // Lưu token vào localStorage
-            navigate('/'); // Chuyển hướng đến trang homepage
-        } else {
-            setError(data.message || 'Login failed');
+            const data = await response.json();
+            if (response.ok) {
+                alert('Login successful');
+                localStorage.setItem('token', data.token); // Lưu token vào localStorage
+                localStorage.setItem('userId', data.userId); // Lưu userId vào localStorage
+                navigate('/'); // Chuyển hướng đến trang homepage
+            } else {
+                setError(data.message || 'Login failed');
+            }
+        } catch (err) {
+            console.error('Error during login:', err);
+            setError('An error occurred. Please try again.');
         }
     };
 
