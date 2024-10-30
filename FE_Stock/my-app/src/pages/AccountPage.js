@@ -1,18 +1,18 @@
-// AccountPage.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import styles from './AccountPage.module.css';
 import logo from '../assets/logo.png';
-import avatar from '../assets/avatar.png';
+import defaultAvatar from '../assets/avatar.png';
 
 const AccountPage = () => {
-    const { id } = useParams(); // Lấy 'id' từ URL
+    const { id } = useParams();
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [avatarTimestamp, setAvatarTimestamp] = useState(new Date().getTime()); // Để làm mới avatar khi cần
 
-    useEffect(() => {
+    const fetchUserData = () => {
         if (!id) {
             setError('No user ID provided.');
             setLoading(false);
@@ -29,7 +29,18 @@ const AccountPage = () => {
                 setError('Failed to load user data');
                 setLoading(false);
             });
+    };
+
+    useEffect(() => {
+        fetchUserData();
     }, [id]);
+
+    useEffect(() => {
+        // Refresh avatar timestamp when userData.avatar changes
+        if (userData?.avatar) {
+            setAvatarTimestamp(new Date().getTime());
+        }
+    }, [userData?.avatar]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -54,7 +65,7 @@ const AccountPage = () => {
                     <i className="fas fa-search searchIcon"></i>
                 </div>
                 <div className={styles.profileIcon}>
-                    <img src={avatar} alt="User Avatar" className={styles.avatar} />
+                    <img src={`${userData.avatar || defaultAvatar}?timestamp=${avatarTimestamp}`} alt="User Avatar" className={styles.avatar} />
                 </div>
             </header>
             <nav className={styles.navbar}>
@@ -80,10 +91,10 @@ const AccountPage = () => {
                         </div>
                         <div className={styles.profileSettings}>
                             <div className={styles.userInfo}>
-                                <img src={avatar} alt="User Avatar" className={styles.avatarLarge} />
+                                <img src={`${userData.avatar || defaultAvatar}?timestamp=${avatarTimestamp}`} alt="User Avatar" className={styles.avatarLarge} />
                                 <p>{userData.username}</p>
                                 <p>{userData.email}</p>
-                                <a href="/update-profile-avatar" className={styles.updateLink}>Update profile avatar</a>
+                                <Link to={`/account/${id}/update-avatar`} className={styles.updateLink}>Update profile avatar</Link>
                             </div>
                             <div className={styles.language}>
                                 <h3>Language</h3>

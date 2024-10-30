@@ -4,6 +4,8 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 
 exports.updateProfile = async (req, res) => {
     const {
@@ -15,12 +17,11 @@ exports.updateProfile = async (req, res) => {
         country,
         username,
         email,
-        password,
         dateOfBirth
     } = req.body;
 
     try {
-        const userId = req.params.id; // Lấy userId từ URL parameter
+        const userId = req.params.id;
 
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({ msg: 'Invalid user ID' });
@@ -46,9 +47,14 @@ exports.updateProfile = async (req, res) => {
             }
             user.dateOfBirth = new Date(dateOfBirth);
         }
-        if (password) {
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(password, salt);
+
+        // Xử lý avatar nếu có file
+        if (req.file) {
+            const avatarUrl = await uploadAvatar(req.file.path);
+            user.avatar = avatarUrl;
+            fs.unlink(req.file.path, (err) => {
+                if (err) console.error("Error deleting temp file:", err);
+            });
         }
 
         await user.save();
@@ -66,12 +72,13 @@ exports.updateProfile = async (req, res) => {
                 username: user.username,
                 email: user.email,
                 dateOfBirth: user.dateOfBirth,
+                avatar: user.avatar
             }
         });
     } catch (error) {
         console.error('Error in updateProfile:', error);
         res.status(500).json({ msg: 'Server Error', error: error.message });
-    }    
+    }
 };
 
 exports.getProfile = async (req, res) => {
@@ -205,4 +212,51 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
     // Reset password logic here
     res.status(200).json({ msg: 'Password reset successfully' });
+};
+
+cloudinary.config({
+    cloud_name: 'dq2ucdguz',
+    api_key: '622122876857883',
+    api_secret: '7qpEjz_9Qj-j03rCEPCi961un7U',
+});
+
+async function uploadAvatar(filePath) {
+    try {
+        const result = await cloudinary.uploader.upload(filePath, { folder: "avatars" });
+        return result.secure_url; // URL của ảnh đã lưu trên Cloudinary
+    } catch (error) {
+        console.error("Error uploading avatar:", error);
+    }
+}
+
+exports.uploadUserAvatar = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        if (!req.file) {
+            return res.status(400).json({ msg: 'No file uploaded' });
+        }
+        
+        // Upload ảnh lên Cloudinary
+        const avatarUrl = await uploadAvatar(req.file.path);
+
+        // Tìm user và cập nhật URL avatar
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        user.avatar = avatarUrl;
+        await user.save();
+
+        // Xóa file tạm sau khi upload thành công
+        fs.unlink(req.file.path, (err) => {
+            if (err) console.error("Error deleting temp file:", err);
+        });
+
+        res.status(200).json({ msg: 'Avatar updated successfully', avatarUrl });
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+        res.status(500).json({ msg: 'Server Error' });
+    }
 };

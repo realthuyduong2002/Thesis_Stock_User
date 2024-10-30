@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage';
 import AIConsultingPage from './pages/AIConsultingPage';
 import AccountPage from './pages/AccountPage';
 import UpdatePersonalDetailsPage from './pages/UpdatePersonalDetailsPage';
+import UpdateAvatarPage from './pages/UpdateAvatarPage';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
               <Route path="/ai-consulting" element={<AIConsultingPage />} />
               <Route path="/account/:id" element={<AccountPage />} />
               <Route path="/update-personal-details/:id" element={<UpdatePersonalDetailsPage />} />
+              <Route path="/account/:id/update-avatar" element={<UpdateAvatarPage />} />
           </Routes>
       </Router>
   );

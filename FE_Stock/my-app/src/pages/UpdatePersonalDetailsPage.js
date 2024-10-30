@@ -1,4 +1,3 @@
-// UpdatePersonalDetailsPage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -14,12 +13,13 @@ const UpdatePersonalDetailsPage = () => {
         dateOfBirth: '',
         gender: '',
         phoneNumber: '',
-        country: ''
+        country: '',
     });
-    const [countryCode, setCountryCode] = useState(''); // Để lưu mã vùng của quốc gia
+    const [countryCode, setCountryCode] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [countries, setCountries] = useState([]);
+    const [avatarFile, setAvatarFile] = useState(null);
 
     useEffect(() => {
         if (!id) {
@@ -48,7 +48,6 @@ const UpdatePersonalDetailsPage = () => {
                     code: country.cca2,
                     callingCode: country.idd?.root + (country.idd?.suffixes ? country.idd.suffixes[0] : ''),
                 }));
-                // Sắp xếp danh sách quốc gia theo thứ tự bảng chữ cái
                 countryList.sort((a, b) => a.name.localeCompare(b.name));
                 setCountries(countryList);
             })
@@ -62,31 +61,62 @@ const UpdatePersonalDetailsPage = () => {
         const { name, value } = e.target;
         
         if (name === 'country') {
-            // Tìm mã vùng cho quốc gia đã chọn
             const selectedCountry = countries.find(country => country.name === value);
             setCountryCode(selectedCountry ? selectedCountry.callingCode : '');
             setUserData({ ...userData, country: value });
         } else if (name === 'phoneNumber') {
-            // Xóa mã vùng khỏi số điện thoại khi người dùng thay đổi
             setUserData({ ...userData, phoneNumber: value.replace(countryCode, '') });
         } else {
             setUserData({ ...userData, [name]: value });
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        axios.put(`http://localhost:4000/api/users/${id}`, userData)
-            .then(() => {
-                alert('Personal details updated successfully!');
-                navigate(`/account/${id}`);
-            })
-            .catch(error => {
-                console.error('Error updating user details:', error);
-                setError('Failed to update personal details');
-            });
+    const handleAvatarChange = (e) => {
+        setAvatarFile(e.target.files[0]); // Lưu file avatar đã chọn
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        try {
+            const formData = new FormData();
+    
+            // Append thông tin cá nhân vào formData
+            formData.append('firstName', userData.firstName);
+            formData.append('lastName', userData.lastName);
+            formData.append('preferredName', userData.preferredName);
+            formData.append('dateOfBirth', userData.dateOfBirth);
+            formData.append('gender', userData.gender);
+            formData.append('phoneNumber', userData.phoneNumber);
+            formData.append('country', userData.country);
+    
+            // Append avatar nếu có file
+            if (avatarFile) {
+                formData.append('avatar', avatarFile);
+                console.log("Avatar file added:", avatarFile);
+            } else {
+                console.log("No avatar file selected");
+            }
+    
+            // Kiểm tra lại dữ liệu form trước khi gửi
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+    
+            const response = await axios.put(`http://localhost:4000/api/users/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+    
+            alert('Personal details updated successfully!');
+            navigate(`/account/${id}`);
+        } catch (error) {
+            console.error('Error updating user details:', error);
+            setError('Failed to update personal details');
+        }
+    };        
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -177,6 +207,14 @@ const UpdatePersonalDetailsPage = () => {
                             </option>
                         ))}
                     </select>
+                </label>
+                <label>
+                    Avatar:
+                    <input 
+                        type="file" 
+                        name="avatar" 
+                        onChange={handleAvatarChange} 
+                    />
                 </label>
                 <button type="submit" className={styles.submitButton}>Save Changes</button>
             </form>
