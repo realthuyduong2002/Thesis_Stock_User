@@ -21,7 +21,7 @@ router.post('/reset-password', resetPassword);
 
 // Protected routes
 router.get('/me', auth, getProfile);
-router.put('/update', auth, updateProfile);
+router.put('/:id', updateProfile); // Thay đổi ở đây để chấp nhận `id` trong URL
 
 // Get user by ID (public)
 router.get('/:id', getUserById);

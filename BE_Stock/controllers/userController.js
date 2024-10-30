@@ -3,6 +3,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 exports.updateProfile = async (req, res) => {
     const {
@@ -19,13 +20,18 @@ exports.updateProfile = async (req, res) => {
     } = req.body;
 
     try {
-        const userId = req.user.id; // Middleware auth đã thêm user vào req.user
+        const userId = req.params.id; // Lấy userId từ URL parameter
+
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ msg: 'Invalid user ID' });
+        }
 
         let user = await User.findById(userId);
         if (!user) {
-            return res.status(400).json({ msg: 'User not found' });
+            return res.status(404).json({ msg: 'User not found' });
         }
 
+        // Cập nhật các thông tin nếu có
         if (firstName) user.firstName = firstName;
         if (lastName) user.lastName = lastName;
         if (preferredName) user.preferredName = preferredName;
@@ -64,17 +70,21 @@ exports.updateProfile = async (req, res) => {
         });
     } catch (error) {
         console.error('Error in updateProfile:', error);
-        res.status(500).send('Server Error');
-    }
+        res.status(500).json({ msg: 'Server Error', error: error.message });
+    }    
 };
 
 exports.getProfile = async (req, res) => {
     try {
         const userId = req.user.id;
 
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ msg: 'Invalid user ID' });
+        }
+
         const user = await User.findById(userId).select('-password');
         if (!user) {
-            return res.status(400).json({ msg: 'User not found' });
+            return res.status(404).json({ msg: 'User not found' });
         }
 
         res.status(200).json(user);

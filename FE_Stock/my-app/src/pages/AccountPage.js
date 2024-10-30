@@ -1,13 +1,13 @@
+// AccountPage.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import styles from './AccountPage.module.css';
 import logo from '../assets/logo.png';
 import avatar from '../assets/avatar.png';
 
 const AccountPage = () => {
-    const { id } = useParams(); // Get 'id' from URL
+    const { id } = useParams(); // Lấy 'id' từ URL
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -76,7 +76,7 @@ const AccountPage = () => {
                             <p>Gender: {userData.gender || 'N/A'}</p>
                             <p>Phone number: {userData.phoneNumber || 'N/A'}</p>
                             <p>Country: {userData.country || 'N/A'}</p>
-                            <a href="/update-personal-details" className={styles.updateLink}>Update personal details</a>
+                            <Link to={`/update-personal-details/${id}`} className={styles.updateLink}>Update personal details</Link>
                         </div>
                         <div className={styles.profileSettings}>
                             <div className={styles.userInfo}>
