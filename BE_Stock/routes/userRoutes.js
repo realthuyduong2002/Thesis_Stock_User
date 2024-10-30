@@ -30,6 +30,6 @@ router.put('/:id', updateProfile);
 router.get('/:id', getUserById);
 
 // Route upload avatar
-router.post('/:id/upload-avatar', upload.single('avatar'), uploadUserAvatar);
+router.post('/:id/upload-avatar', auth, upload.single('avatar'), uploadUserAvatar);
 
 module.exports = router;

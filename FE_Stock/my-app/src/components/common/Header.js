@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/logo.png';
-import avatar from '../../assets/avatar.png';
+import defaultAvatar from '../../assets/avatar.png';
 import settingsIcon from '../../assets/settings.png';
 import privacyIcon from '../../assets/privacy.png';
 import helpIcon from '../../assets/help.png';
@@ -16,22 +16,29 @@ const Header = () => {
     const [userName, setUserName] = useState('User');
     const [userEmail, setUserEmail] = useState('user@example.com');
     const navigate = useNavigate();
+    const [userAvatar, setUserAvatar] = useState(defaultAvatar);
+    const [avatarTimestamp, setAvatarTimestamp] = useState(new Date().getTime());
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         const storedUserId = localStorage.getItem('userId');
+        const storedUserAvatar = localStorage.getItem('userAvatar');
         if (token && storedUserId) {
             setIsLoggedIn(true);
             setUserId(storedUserId);
+            if (storedUserAvatar) {
+                setUserAvatar(storedUserAvatar);
+            }
 
-            // Fetch user data to display in the dropdown
-            axios
-                .get(`http://localhost:4000/api/users/${storedUserId}`)
-                .then((response) => {
+            axios.get(`http://localhost:4000/api/users/${storedUserId}`)
+                .then(response => {
                     setUserName(response.data.username || 'User');
                     setUserEmail(response.data.email || 'user@example.com');
+                    if (!storedUserAvatar) {
+                        setUserAvatar(response.data.avatar || defaultAvatar);
+                    }
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error('Error fetching user data:', error);
                 });
         }
@@ -66,7 +73,7 @@ const Header = () => {
                 {isLoggedIn ? (
                     <div className="user-menu">
                         <img
-                            src={avatar}
+                            src={`${userAvatar}?timestamp=${avatarTimestamp}`}
                             alt="User Avatar"
                             className="user-avatar"
                             onClick={toggleDropdown}

@@ -1,61 +1,68 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import styles from '../pages/UpdateAvatarPage.module.css';
 
 const UpdateAvatarPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [avatarFile, setAvatarFile] = useState(null);
-    const [error, setError] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null); // Lưu trữ URL ảnh xem trước
 
-    const handleAvatarChange = (e) => {
-        setAvatarFile(e.target.files[0]);
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+
+        if (file) {
+            const fileUrl = URL.createObjectURL(file);
+            setPreviewUrl(fileUrl);
+        }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleUpload = async () => {
+        if (!selectedFile) {
+            alert("Please select an image first.");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('avatar', selectedFile);
     
         try {
-            if (!avatarFile) {
-                setError("Please select an avatar to upload.");
-                return;
-            }
-    
-            const formData = new FormData();
-            formData.append('avatar', avatarFile);
-    
-            await axios.post(`http://localhost:4000/api/users/${id}/upload-avatar`, formData, {
+            const response = await axios.post(`http://localhost:4000/api/users/${id}/upload-avatar`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Thêm token nếu cần
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+            alert("Avatar updated successfully!");
     
-            alert('Avatar updated successfully!');
-            navigate(`/account/${id}`); // Điều hướng lại trang account
+            // Lưu URL của avatar vào localStorage để Header có thể sử dụng
+            localStorage.setItem('userAvatar', response.data.avatar);
+            
+            // Điều hướng người dùng về trang Account Page sau khi upload thành công
+            navigate(`/account/${id}`);
         } catch (error) {
-            console.error('Error uploading avatar:', error);
-            setError('Failed to upload avatar');
+            console.error("Error uploading avatar:", error);
+            alert("Failed to upload avatar.");
         }
-    };            
+    };    
 
     return (
-        <div className={styles.updateAvatarPage}>
+        <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px', maxWidth: '400px', margin: '0 auto' }}>
             <h2>Update Avatar</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Select Avatar:
-                    <input 
-                        type="file" 
-                        name="avatar" 
-                        onChange={handleAvatarChange} 
-                        accept="image/*"
-                    />
-                </label>
-                <button type="submit">Upload Avatar</button>
-            </form>
-            {error && <p className={styles.error}>{error}</p>}
+            <div>
+                <label>Select Avatar:</label>
+                <input type="file" accept="image/*" onChange={handleFileChange} />
+            </div>
+            {previewUrl && (
+                <div style={{ marginTop: '15px' }}>
+                    <p>Preview:</p>
+                    <img src={previewUrl} alt="Avatar Preview" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+                </div>
+            )}
+            <button onClick={handleUpload} style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                Upload Avatar
+            </button>
         </div>
     );
 };

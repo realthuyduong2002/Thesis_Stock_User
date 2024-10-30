@@ -62,7 +62,7 @@ const AccountPage = () => {
                 </Link>
                 <div className={styles.searchContainer}>
                     <input type="text" placeholder="Search in accounts..." className={styles.searchBar} />
-                    <i className="fas fa-search searchIcon"></i>
+                    <span className={styles.searchIcon}><i className="fas fa-search"></i></span>
                 </div>
                 <div className={styles.profileIcon}>
                     <img src={`${userData.avatar || defaultAvatar}?timestamp=${avatarTimestamp}`} alt="User Avatar" className={styles.avatar} />

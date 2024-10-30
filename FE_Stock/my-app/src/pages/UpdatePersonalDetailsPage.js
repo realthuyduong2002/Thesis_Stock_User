@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../pages/UpdatePersonalDetailsPage.module.css';
 
 const UpdatePersonalDetailsPage = () => {
-    const { id } = useParams(); // Lấy `id` từ URL
+    const { id } = useParams(); // Lấy id từ URL
     const navigate = useNavigate();
     const [userData, setUserData] = useState({
         firstName: '',
@@ -19,7 +19,6 @@ const UpdatePersonalDetailsPage = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [countries, setCountries] = useState([]);
-    const [avatarFile, setAvatarFile] = useState(null);
 
     useEffect(() => {
         if (!id) {
@@ -71,10 +70,6 @@ const UpdatePersonalDetailsPage = () => {
         }
     };
 
-    const handleAvatarChange = (e) => {
-        setAvatarFile(e.target.files[0]); // Lưu file avatar đã chọn
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
     
@@ -89,14 +84,6 @@ const UpdatePersonalDetailsPage = () => {
             formData.append('gender', userData.gender);
             formData.append('phoneNumber', userData.phoneNumber);
             formData.append('country', userData.country);
-    
-            // Append avatar nếu có file
-            if (avatarFile) {
-                formData.append('avatar', avatarFile);
-                console.log("Avatar file added:", avatarFile);
-            } else {
-                console.log("No avatar file selected");
-            }
     
             // Kiểm tra lại dữ liệu form trước khi gửi
             for (let [key, value] of formData.entries()) {
@@ -207,14 +194,6 @@ const UpdatePersonalDetailsPage = () => {
                             </option>
                         ))}
                     </select>
-                </label>
-                <label>
-                    Avatar:
-                    <input 
-                        type="file" 
-                        name="avatar" 
-                        onChange={handleAvatarChange} 
-                    />
                 </label>
                 <button type="submit" className={styles.submitButton}>Save Changes</button>
             </form>

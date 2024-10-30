@@ -230,13 +230,13 @@ async function uploadAvatar(filePath) {
 }
 
 exports.uploadUserAvatar = async (req, res) => {
-    const userId = req.user.id;
+    const userId = req.params.id; // Sử dụng req.params.id thay cho req.user.id
 
     try {
         if (!req.file) {
             return res.status(400).json({ msg: 'No file uploaded' });
         }
-        
+
         // Upload ảnh lên Cloudinary
         const avatarUrl = await uploadAvatar(req.file.path);
 
