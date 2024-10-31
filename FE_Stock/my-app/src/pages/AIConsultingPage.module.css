@@ -88,8 +88,15 @@
     font-size: 32px;
     cursor: pointer;
     color: #555;
-    margin-left: 20px; /* Space between avatar and navigation menu */
+    margin-left: 20px;
     position: relative;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Làm cho avatar hình tròn */
+    object-fit: cover; /* Đảm bảo hình ảnh vừa vặn trong khung */
 }
 
 /* Profile Menu */
@@ -118,21 +125,27 @@
 }
 
 .manageAccount {
-    display: block;
+    display: inline-block;
     background-color: #d9f7be;
     color: #333;
     border: none;
-    padding: 8px;
+    padding: 6px 14px;
     border-radius: 20px;
     cursor: pointer;
     margin-top: 8px;
     text-align: center;
+    font-size: 14px;
+    white-space: nowrap;
+    line-height: normal;
     transition: background-color 0.3s ease;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .manageAccount:hover {
     background-color: #b7eb8f;
 }
+
 
 .profileMenuOptions {
     margin-top: 16px;

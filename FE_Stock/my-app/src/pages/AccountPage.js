@@ -10,7 +10,8 @@ const AccountPage = () => {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [avatarTimestamp, setAvatarTimestamp] = useState(new Date().getTime()); // Để làm mới avatar khi cần
+    const [avatarTimestamp, setAvatarTimestamp] = useState(new Date().getTime());
+    const [countryCode, setCountryCode] = useState(''); // Lưu trữ mã vùng
 
     const fetchUserData = () => {
         if (!id) {
@@ -23,6 +24,11 @@ const AccountPage = () => {
             .then(response => {
                 setUserData(response.data);
                 setLoading(false);
+
+                // Lấy mã vùng dựa trên quốc gia
+                if (response.data.country) {
+                    fetchCountryCode(response.data.country);
+                }
             })
             .catch(error => {
                 console.error('Error fetching user data:', error);
@@ -31,12 +37,24 @@ const AccountPage = () => {
             });
     };
 
+    const fetchCountryCode = (countryName) => {
+        axios.get('https://restcountries.com/v3.1/all')
+            .then(response => {
+                const country = response.data.find(c => c.name.common === countryName);
+                if (country && country.idd) {
+                    setCountryCode(country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : ''));
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching country code:', error);
+            });
+    };
+
     useEffect(() => {
         fetchUserData();
     }, [id]);
 
     useEffect(() => {
-        // Refresh avatar timestamp when userData.avatar changes
         if (userData?.avatar) {
             setAvatarTimestamp(new Date().getTime());
         }
@@ -85,14 +103,16 @@ const AccountPage = () => {
                             <p>Preferred name: {userData.preferredName || 'N/A'}</p>
                             <p>Date of birth: {userData.dateOfBirth ? new Date(userData.dateOfBirth).toLocaleDateString() : 'N/A'}</p>
                             <p>Gender: {userData.gender || 'N/A'}</p>
-                            <p>Phone number: {userData.phoneNumber || 'N/A'}</p>
+                            <p>
+                                Phone number: {countryCode ? `${countryCode} ${userData.phoneNumber}` : userData.phoneNumber || 'N/A'}
+                            </p>
                             <p>Country: {userData.country || 'N/A'}</p>
                             <Link to={`/update-personal-details/${id}`} className={styles.updateLink}>Update personal details</Link>
                         </div>
                         <div className={styles.profileSettings}>
                             <div className={styles.userInfo}>
                                 <img src={`${userData.avatar || defaultAvatar}?timestamp=${avatarTimestamp}`} alt="User Avatar" className={styles.avatarLarge} />
-                                <p>{userData.username}</p>
+                                <p className={styles.username}>{userData.username}</p> {/* Thêm class để in đậm */}
                                 <p>{userData.email}</p>
                                 <Link to={`/account/${id}/update-avatar`} className={styles.updateLink}>Update profile avatar</Link>
                             </div>

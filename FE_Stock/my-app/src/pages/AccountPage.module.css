@@ -120,6 +120,11 @@
     margin-bottom: 20px;
 }
 
+.username {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 .avatarLarge {
     height: 100px;
     width: 100px;

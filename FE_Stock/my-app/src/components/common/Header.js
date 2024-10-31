@@ -7,7 +7,7 @@ import settingsIcon from '../../assets/settings.png';
 import privacyIcon from '../../assets/privacy.png';
 import helpIcon from '../../assets/help.png';
 import addSwitchIcon from '../../assets/add-switch.png';
-import '../common/Header.css';
+import styles from '../common/Header.css';
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,20 +26,22 @@ const Header = () => {
         if (token && storedUserId) {
             setIsLoggedIn(true);
             setUserId(storedUserId);
-            if (storedUserAvatar) {
-                setUserAvatar(storedUserAvatar);
-            }
 
+            // Fetch user data
             axios.get(`http://localhost:4000/api/users/${storedUserId}`)
                 .then(response => {
                     setUserName(response.data.username || 'User');
                     setUserEmail(response.data.email || 'user@example.com');
-                    if (!storedUserAvatar) {
-                        setUserAvatar(response.data.avatar || defaultAvatar);
+                    // Check if avatar exists, else set to defaultAvatar
+                    if (response.data.avatar) {
+                        setUserAvatar(response.data.avatar);
+                    } else {
+                        setUserAvatar(defaultAvatar);
                     }
                 })
                 .catch(error => {
                     console.error('Error fetching user data:', error);
+                    setUserAvatar(defaultAvatar); // Fallback to default avatar on error
                 });
         }
     }, []);
@@ -79,47 +81,27 @@ const Header = () => {
                             onClick={toggleDropdown}
                         />
                         {isDropdownOpen && (
-                            <div className="dropdown-menu">
-                                <div className="dropdown-header">
-                                    <p>{userName}</p>
-                                    <p>{userEmail}</p>
-                                    <Link to={`/account/${userId}`}>Manage Your Account</Link>
-                                </div>
-                                <div className="dropdown-options">
-                                    <Link to="/settings">
-                                        <img
-                                            src={settingsIcon}
-                                            alt="Settings Icon"
-                                            className="dropdown-icon"
-                                        />
-                                        Settings
+                            <div className="profileMenu">
+                                <p className="profileName">{userName}</p>
+                                <p className="profileEmail">{userEmail}</p>
+                                <Link to={`/account/${userId}`} className="manageAccount">
+                                    Manage Your Account
+                                </Link>
+                                <div className="profileMenuOptions">
+                                    <Link to="/settings" className="profileMenuItem">
+                                        <img src={settingsIcon} alt="Settings Icon" className="menuIcon" /> Settings
                                     </Link>
-                                    <Link to="/privacy">
-                                        <img
-                                            src={privacyIcon}
-                                            alt="Privacy Icon"
-                                            className="dropdown-icon"
-                                        />
-                                        Privacy
+                                    <Link to="/privacy" className="profileMenuItem">
+                                        <img src={privacyIcon} alt="Privacy Icon" className="menuIcon" /> Privacy
                                     </Link>
-                                    <Link to="/help">
-                                        <img
-                                            src={helpIcon}
-                                            alt="Help Icon"
-                                            className="dropdown-icon"
-                                        />
-                                        Help
+                                    <Link to="/help" className="profileMenuItem">
+                                        <img src={helpIcon} alt="Help Icon" className="menuIcon" /> Help
                                     </Link>
-                                    <Link to="/switch-account">
-                                        <img
-                                            src={addSwitchIcon}
-                                            alt="Add or Switch Accounts Icon"
-                                            className="dropdown-icon"
-                                        />
-                                        Add or switch accounts
+                                    <Link to="/switch-account" className="profileMenuItem">
+                                        <img src={addSwitchIcon} alt="Add or Switch Accounts Icon" className="menuIcon" /> Add or switch accounts
                                     </Link>
                                 </div>
-                                <button onClick={handleLogout} className="sign-out">
+                                <button onClick={handleLogout} className="signOut">
                                     Sign out
                                 </button>
                             </div>

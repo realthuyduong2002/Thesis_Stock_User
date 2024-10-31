@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styles from '../pages/UpdatePersonalDetailsPage.module.css';
 
 const UpdatePersonalDetailsPage = () => {
-    const { id } = useParams(); // Lấy id từ URL
+    const { id } = useParams();
     const navigate = useNavigate();
     const [userData, setUserData] = useState({
         firstName: '',
@@ -58,13 +58,14 @@ const UpdatePersonalDetailsPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
+
         if (name === 'country') {
             const selectedCountry = countries.find(country => country.name === value);
-            setCountryCode(selectedCountry ? selectedCountry.callingCode : '');
-            setUserData({ ...userData, country: value });
+            const newCountryCode = selectedCountry ? selectedCountry.callingCode : '';
+            setCountryCode(newCountryCode);
+            setUserData({ ...userData, country: value, phoneNumber: '' });
         } else if (name === 'phoneNumber') {
-            setUserData({ ...userData, phoneNumber: value.replace(countryCode, '') });
+            setUserData({ ...userData, phoneNumber: value });
         } else {
             setUserData({ ...userData, [name]: value });
         }
@@ -72,38 +73,32 @@ const UpdatePersonalDetailsPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         try {
             const formData = new FormData();
-    
-            // Append thông tin cá nhân vào formData
+
             formData.append('firstName', userData.firstName);
             formData.append('lastName', userData.lastName);
             formData.append('preferredName', userData.preferredName);
             formData.append('dateOfBirth', userData.dateOfBirth);
             formData.append('gender', userData.gender);
-            formData.append('phoneNumber', userData.phoneNumber);
+            formData.append('phoneNumber', countryCode + userData.phoneNumber);
             formData.append('country', userData.country);
-    
-            // Kiểm tra lại dữ liệu form trước khi gửi
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}:`, value);
-            }
-    
+
             const response = await axios.put(`http://localhost:4000/api/users/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-    
+
             alert('Personal details updated successfully!');
             navigate(`/account/${id}`);
         } catch (error) {
             console.error('Error updating user details:', error);
             setError('Failed to update personal details');
         }
-    };        
+    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -114,52 +109,52 @@ const UpdatePersonalDetailsPage = () => {
             <form onSubmit={handleSubmit} className={styles.updateForm}>
                 <label>
                     First Name:
-                    <input 
-                        type="text" 
-                        name="firstName" 
-                        value={userData.firstName || ''} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="text"
+                        name="firstName"
+                        value={userData.firstName || ''}
+                        onChange={handleChange}
+                        required
                     />
                 </label>
                 <label>
                     Last Name:
-                    <input 
-                        type="text" 
-                        name="lastName" 
-                        value={userData.lastName || ''} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="text"
+                        name="lastName"
+                        value={userData.lastName || ''}
+                        onChange={handleChange}
+                        required
                     />
                 </label>
                 <label>
                     Preferred Name:
-                    <input 
-                        type="text" 
-                        name="preferredName" 
-                        value={userData.preferredName || ''} 
-                        onChange={handleChange} 
+                    <input
+                        type="text"
+                        name="preferredName"
+                        value={userData.preferredName || ''}
+                        onChange={handleChange}
                     />
                 </label>
                 <label>
                     Date of Birth:
-                    <input 
-                        type="date" 
-                        name="dateOfBirth" 
-                        value={userData.dateOfBirth ? new Date(userData.dateOfBirth).toISOString().split('T')[0] : ''} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="date"
+                        name="dateOfBirth"
+                        value={userData.dateOfBirth ? new Date(userData.dateOfBirth).toISOString().split('T')[0] : ''}
+                        onChange={handleChange}
+                        required
                     />
                 </label>
                 <label>
                     Gender:
-                    <select 
-                        name="gender" 
-                        value={userData.gender || ''} 
-                        onChange={handleChange} 
+                    <select
+                        name="gender"
+                        value={userData.gender || ''}
+                        onChange={handleChange}
                         required
                     >
-                        <option value="">Select Gender</option>
+                        <option value="" className={styles.defaultOption}>Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
@@ -168,26 +163,32 @@ const UpdatePersonalDetailsPage = () => {
                 <label>
                     Phone Number:
                     <div className={styles.phoneNumberContainer}>
-                        <span>{countryCode}</span>
-                        <input 
-                            type="tel" 
-                            name="phoneNumber" 
-                            value={userData.phoneNumber || ''} 
-                            onChange={handleChange} 
-                            required 
+                        <input
+                            type="text"
+                            value={countryCode}
+                            readOnly
+                            className={styles.countryCodeInput}
+                        />
+                        <input
+                            type="tel"
+                            name="phoneNumber"
+                            value={userData.phoneNumber || ''}
+                            onChange={handleChange}
+                            required
                             placeholder="Enter phone number"
+                            className={styles.phoneNumberInput}
                         />
                     </div>
                 </label>
                 <label>
                     Country:
-                    <select 
-                        name="country" 
-                        value={userData.country || ''} 
-                        onChange={handleChange} 
+                    <select
+                        name="country"
+                        value={userData.country || ''}
+                        onChange={handleChange}
                         required
                     >
-                        <option value="">Select Country</option>
+                        <option value="" className={styles.defaultOption}>Select Country</option>
                         {countries.map((country) => (
                             <option key={country.code} value={country.name}>
                                 {country.name}
@@ -195,7 +196,9 @@ const UpdatePersonalDetailsPage = () => {
                         ))}
                     </select>
                 </label>
-                <button type="submit" className={styles.submitButton}>Save Changes</button>
+                <div className={styles.submitButtonContainer}>
+                    <button type="submit" className={styles.submitButton}>Save Changes</button>
+                </div>
             </form>
         </div>
     );
