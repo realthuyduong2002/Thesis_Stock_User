@@ -22,7 +22,8 @@
     color: #333;
 }
 
-.updateForm input, .updateForm select {
+.updateForm input,
+.updateForm select {
     padding: 8px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -31,7 +32,7 @@
 
 .submitButtonContainer {
     display: flex;
-    justify-content: center; /* Căn giữa nút */
+    justify-content: center;
     margin-top: 20px;
 }
 
@@ -53,12 +54,12 @@
 .phoneNumberContainer {
     display: flex;
     align-items: center;
-    gap: 2px; /* Giảm khoảng cách giữa hai ô */
+    gap: 2px;
 }
 
 .countryCodeInput {
-    width: 80px; /* Điều chỉnh chiều rộng cụ thể cho mã vùng */
-    max-width: 80px; /* Giới hạn chiều rộng tối đa */
+    width: 80px;
+    max-width: 80px;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 5px;

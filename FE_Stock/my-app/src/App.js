@@ -8,22 +8,24 @@ import AIConsultingPage from './pages/AIConsultingPage';
 import AccountPage from './pages/AccountPage';
 import UpdatePersonalDetailsPage from './pages/UpdatePersonalDetailsPage';
 import UpdateAvatarPage from './pages/UpdateAvatarPage';
+import ArticleDetailPage from './pages/ArticleDetailPage';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
-  return (
-      <Router>
-          <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/register" element={<SignUpPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/ai-consulting" element={<AIConsultingPage />} />
-              <Route path="/account/:id" element={<AccountPage />} />
-              <Route path="/update-personal-details/:id" element={<UpdatePersonalDetailsPage />} />
-              <Route path="/account/:id/update-avatar" element={<UpdateAvatarPage />} />
-          </Routes>
-      </Router>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/register" element={<SignUpPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/ai-consulting" element={<AIConsultingPage />} />
+                <Route path="/account/:id" element={<AccountPage />} />
+                <Route path="/update-personal-details/:id" element={<UpdatePersonalDetailsPage />} />
+                <Route path="/account/:id/update-avatar" element={<UpdateAvatarPage />} />
+                <Route path="/article/:articleId" element={<ArticleDetailPage />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

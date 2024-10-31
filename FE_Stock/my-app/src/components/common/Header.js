@@ -41,7 +41,7 @@ const Header = () => {
                 })
                 .catch(error => {
                     console.error('Error fetching user data:', error);
-                    setUserAvatar(defaultAvatar); // Fallback to default avatar on error
+                    setUserAvatar(defaultAvatar);
                 });
         }
     }, []);

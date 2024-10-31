@@ -1,19 +1,17 @@
-/* Navbar.css */
-
 .navbar {
     display: flex;
     justify-content: center;
-    background-color: #0077cc;
+    background-color: #d2e1eb;
     padding: 10px 0;
 }
 
 .navbar a {
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 10px 15px;
     font-weight: bold;
 }
 
 .navbar a:hover {
-    background-color: #005fa3;
+    background-color: #38ff85c9;
     border-radius: 5px;
 }

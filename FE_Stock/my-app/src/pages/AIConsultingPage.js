@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 import styles from '../pages/AIConsultingPage.module.css';
 import logo from '../assets/logo.png';
 import menuIcon from '../assets/menu.png';
@@ -10,7 +10,6 @@ import privacyIcon from '../assets/privacy.png';
 import helpIcon from '../assets/help.png';
 import addSwitchIcon from '../assets/add-switch.png';
 import defaultAvatar from '../assets/avatar.png';
-import { FaUserCircle } from 'react-icons/fa';
 
 const AIConsultingPage = () => {
   const [inputValue, setInputValue] = useState('');
@@ -152,7 +151,7 @@ const AIConsultingPage = () => {
             <a href="/" className={styles.navLink}>
               Home
             </a>
-            <a href="/news" className={styles.navLink}>
+            <a href="/" className={styles.navLink}>
               News
             </a>
             <a href="/markets" className={styles.navLink}>
