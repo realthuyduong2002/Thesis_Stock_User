@@ -1,0 +1,34 @@
+/* src/pages/AnalysisPage.css */
+
+.analysis-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.analysis-page-container h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #333;
+}
+
+.dashboard-iframe {
+    width: 100%;
+    height: 80vh; /* Chiều cao iframe chiếm 80% viewport height */
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .dashboard-iframe {
+        height: 60vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-iframe {
+        height: 50vh;
+    }
+}

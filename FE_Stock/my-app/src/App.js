@@ -10,7 +10,7 @@ import UpdatePersonalDetailsPage from './pages/UpdatePersonalDetailsPage';
 import UpdateAvatarPage from './pages/UpdateAvatarPage';
 import ArticleDetailPage from './pages/ArticleDetailPage';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
+import AnalysisPage from './pages/AnalysisPage';
 function App() {
     return (
         <Router>
@@ -23,6 +23,7 @@ function App() {
                 <Route path="/update-personal-details/:id" element={<UpdatePersonalDetailsPage />} />
                 <Route path="/account/:id/update-avatar" element={<UpdateAvatarPage />} />
                 <Route path="/article/:articleId" element={<ArticleDetailPage />} />
+                <Route path="/analysis" element={<AnalysisPage />} />
             </Routes>
         </Router>
     );
