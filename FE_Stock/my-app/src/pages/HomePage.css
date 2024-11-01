@@ -1,23 +1,40 @@
-/* HomePage.css */
+/* Main Container for the News and Market Overview Sections */
+.page-content {
+    display: flex;
+    flex-direction: row-reverse; /* Places the sidebar on the right */
+    justify-content: center; /* Centers the entire content horizontally */
+    gap: 2rem;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 1rem;
+}
 
-/* Container chính cho hai phần hiển thị */
+/* Main Content Styling */
+.main-content {
+    flex: 1;
+    min-width: 0; /* Prevents flex item from overflowing */
+}
+
+/* News Container */
 .news-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 40px 20px;
     background-color: #f9f9f9;
+    color: #333;
 }
 
-/* Tiêu đề được căn giữa */
+/* News Section Title */
 .news-title {
     text-align: center;
     margin-bottom: 30px;
     font-size: 2em;
-    color: #333;
+    font-weight: 700;
+    color: #2d3748;
 }
 
-/* Phần hiển thị dạng thẻ */
+/* Card Slider Container */
 .news-card-slider {
     position: relative;
     width: 100%;
@@ -26,6 +43,7 @@
     margin-bottom: 40px;
 }
 
+/* Card Slider Grid */
 .news-grid {
     display: flex;
     overflow: hidden;
@@ -39,13 +57,14 @@
     cursor: grabbing;
 }
 
+/* Individual News Card */
 .news-card {
     flex: 0 0 30%; /* 3 cards per view */
     margin-right: 20px;
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
@@ -56,26 +75,28 @@
 
 .news-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* News Card Image */
 .news-card-image {
     width: 100%;
-    height: 220px; /* Increased height from 180px to 220px */
+    height: 220px;
     object-fit: cover;
 }
 
 .news-card-placeholder {
     width: 100%;
-    height: 220px; /* Match the increased image height */
-    background-color: #ddd;
+    height: 220px;
+    background-color: #e2e8f0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #555;
+    color: #4a5568;
     font-size: 1em;
 }
 
+/* News Card Content */
 .news-card-content {
     padding: 15px;
     display: flex;
@@ -84,32 +105,27 @@
 }
 
 .news-card-title {
-    font-size: 1.2em;
+    font-size: 1.25em;
+    font-weight: 600;
     margin: 0 0 10px;
-    color: #0077cc;
-    flex-grow: 1;
-}
-
-.news-card-title:hover {
-    text-decoration: underline;
+    color: #2b6cb0;
 }
 
 .news-card-description {
-    font-size: 0.95em;
-    color: #555;
-    flex-grow: 2;
+    font-size: 1em;
+    color: #4a5568;
+    margin-bottom: 10px;
 }
 
 .news-card-date {
-    font-size: 0.8em;
-    color: #999;
-    margin-top: 10px;
+    font-size: 0.85em;
+    color: #718096;
     text-align: right;
 }
 
 /* Scroll Buttons */
 .scroll-button {
-    background-color: rgba(39, 198, 174, 0.8);
+    background-color: rgba(45, 55, 72, 0.8);
     border: none;
     color: #fff;
     cursor: pointer;
@@ -123,24 +139,11 @@
     transition: background-color 0.2s;
 }
 
-.scroll-button.left {
-    margin-right: 10px;
-}
-
-.scroll-button.right {
-    margin-left: 10px;
-}
-
 .scroll-button:hover:not(:disabled) {
-    background-color: rgba(26, 160, 137, 0.8);
+    background-color: rgba(45, 55, 72, 1);
 }
 
-.scroll-button:disabled {
-    background-color: rgba(200, 200, 200, 0.8);
-    cursor: not-allowed;
-}
-
-/* Phần hiển thị dạng danh sách ngang */
+/* News List Section */
 .news-list-section {
     width: 100%;
     margin-top: 40px;
@@ -152,6 +155,7 @@
     margin: 0;
 }
 
+/* News List Item */
 .news-list-item {
     display: flex;
     align-items: flex-start;
@@ -159,14 +163,14 @@
     border-radius: 8px;
     margin-bottom: 15px;
     padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     cursor: pointer;
     transition: background-color 0.2s, box-shadow 0.2s;
 }
 
 .news-list-item:hover {
-    background-color: #f0f8f8;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #edf2f7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .news-list-image {
@@ -175,7 +179,6 @@
     object-fit: cover;
     border-radius: 5px;
     margin-right: 15px;
-    flex-shrink: 0;
 }
 
 .news-list-content {
@@ -184,26 +187,16 @@
 
 .news-list-title {
     font-size: 1.1em;
-    margin: 0 0 5px;
-    color: #0077cc;
-}
-
-.news-list-title:hover {
-    text-decoration: underline;
-}
-
-.news-list-date {
-    font-size: 0.75em;
-    color: #999;
-    margin-bottom: 10px;
+    color: #2b6cb0;
+    font-weight: 600;
 }
 
 .news-list-description {
-    font-size: 0.9em;
-    color: #555;
+    font-size: 0.95em;
+    color: #4a5568;
 }
 
-/* Pagination Styles */
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;
@@ -212,8 +205,7 @@
 }
 
 .pagination-button {
-    border: none;
-    background-color: #27c6ae;
+    background-color: #38b2ac;
     color: #fff;
     cursor: pointer;
     border-radius: 50%;
@@ -226,148 +218,86 @@
     transition: background-color 0.2s;
 }
 
-.pagination-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.pagination-button:not(:disabled):hover {
-    background-color: #1aa089;
-}
-
 .pagination-info {
     font-size: 1em;
     color: #333;
 }
 
-/* Loading and Error Messages */
-.loading,
-.error-message {
-    text-align: center;
-    font-size: 1.2em;
-    color: #555;
+/* Stock Sidebar Styling */
+.stock-sidebar {
+    width: 400px;
+    flex-shrink: 0;
+    align-items: center;
 }
 
-.error-message {
-    color: #e74c3c;
+/* Stock Widget Styling */
+.stock-widget {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    position: sticky;
+    top: 1rem;
+    align-items: center;
+}
+
+.stock-widget-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* Stock List Layout */
+.stock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Individual Stock Item */
+.stock-item {
+    padding: 0.75rem;
+    border-radius: 6px;
+    background: #f8fafc;
+    transition: background-color 0.2s;
+}
+
+.stock-item:hover {
+    background: #f1f5f9;
+}
+
+.stock-symbol {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.stock-price {
+    font-size: 1em;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.stock-change {
+    font-size: 0.9em;
+    color: #718096;
 }
 
 /* Responsive Adjustments */
-@media (max-width: 1600px) {
-    .news-card {
-        flex: 0 0 28%; /* Slightly larger than 30% */
-        max-width: 450px; /* Increase max-width */
-    }
-
-    .news-card-image {
-        height: 240px; /* Further increase image height */
-    }
-}
-
-@media (max-width: 1440px) {
-    .news-card {
-        flex: 0 0 30%; /* Reset to 30% */
-        max-width: 400px; /* Reset max-width */
-    }
-
-    .news-card-image {
-        height: 220px; /* Reset image height */
-    }
-}
-
 @media (max-width: 1024px) {
-    .news-container {
-        padding: 30px 15px;
+    .page-content {
+        flex-direction: column;
+        align-items: center;
     }
 
-    .news-title {
-        font-size: 1.8em;
+    .main-content, .stock-sidebar {
+        width: 100%; /* Full width for each section on smaller screens */
+        max-width: none;
     }
 
-    .news-card {
-        flex: 0 0 30%; /* Keep 3 cards per view */
-        margin-right: 15px;
-    }
-
-    .news-card-image {
-        height: 200px; /* Adjusted height for medium screens */
+    .stock-sidebar {
+        margin-top: 2rem;
     }
 }
-
-@media (max-width: 768px) {
-    .news-card {
-        flex: 0 0 45%; /* 2 cards per view on tablet */
-        margin-right: 15px;
-    }
-
-    .news-card-image,
-    .news-card-placeholder {
-        height: 180px; /* Increased image height */
-    }
-
-    .news-list-image {
-        width: 100px;
-        height: 70px;
-    }
-
-    .scroll-button {
-        width: 35px;
-        height: 35px;
-    }
-
-    .pagination-button {
-        width: 40px;
-        height: 40px;
-        margin: 0 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .news-card {
-        flex: 0 0 100%; /* 1 card per view on mobile */
-        margin-right: 10px;
-    }
-
-    .news-card-image,
-    .news-card-placeholder {
-        height: 150px; /* Increased image height for mobile */
-    }
-
-    .news-card-title {
-        font-size: 1em;
-    }
-
-    .news-card-description {
-        font-size: 0.9em;
-    }
-
-    .news-list-image {
-        width: 80px;
-        height: 60px;
-    }
-
-    .news-list-title {
-        font-size: 1em;
-    }
-
-    .news-list-description {
-        font-size: 0.85em;
-    }
-
-    .pagination-info {
-        display: none;
-    }
-
-    .scroll-button {
-        width: 30px;
-        height: 30px;
-    }
-
-    .pagination-button {
-        width: 35px;
-        height: 35px;
-        margin: 0 10px;
-    }
-}
-
-
