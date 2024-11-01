@@ -4,31 +4,99 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 40px; /* Increased padding for more space */
+    background-color: #f9f9f9; /* Light background color for a cleaner look */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #fff; /* White background for header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for header separation */
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.logo {
+    height: 40px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #0073e6; /* Change color on hover for better interactivity */
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .analysis-page-container h1 {
-    margin-bottom: 20px;
-    font-size: 2em;
-    color: #333;
+    margin-bottom: 30px; /* Increased margin for better spacing */
+    font-size: 2.5em; /* Larger font size for better readability */
+    color: #222; /* Darker color for better contrast */
+    text-align: center;
 }
 
 .dashboard-iframe {
     width: 100%;
+    max-width: 1200px; /* Set a maximum width for larger screens */
     height: 80vh; /* Chiều cao iframe chiếm 80% viewport height */
     border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 12px; /* Increased border-radius for smoother corners */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Softer shadow for a cleaner look */
+    margin-top: 20px; /* Added margin-top for spacing */
 }
 
 @media (max-width: 768px) {
     .dashboard-iframe {
         height: 60vh;
     }
+    .analysis-page-container h1 {
+        font-size: 2em; /* Adjusted font size for medium screens */
+    }
 }
 
 @media (max-width: 480px) {
     .dashboard-iframe {
         height: 50vh;
+    }
+    .analysis-page-container h1 {
+        font-size: 1.8em; /* Smaller font size for smaller screens */
+        margin-bottom: 20px; /* Reduced margin for tighter spacing */
+    }
+    .nav-menu {
+        gap: 10px; /* Smaller gap for compact navigation on small screens */
     }
 }

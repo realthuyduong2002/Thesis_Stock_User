@@ -1,17 +1,23 @@
 .navbar {
     display: flex;
     justify-content: center;
-    background-color: #d2e1eb;
-    padding: 10px 0;
+    background-color: #0077b6; /* Darker blue for a more professional look */
+    padding: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }
 
 .navbar a {
-    color: rgb(0, 0, 0);
-    padding: 10px 15px;
+    color: #ffffff; /* White text for contrast */
+    padding: 10px 20px;
     font-weight: bold;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    border-radius: 5px; /* Slightly rounded corners */
+    
 }
 
 .navbar a:hover {
-    background-color: #38ff85c9;
-    border-radius: 5px;
+    background-color: #48cae4; /* Softer blue highlight on hover */
+    color: #003049; /* Darker color for better readability */
 }
