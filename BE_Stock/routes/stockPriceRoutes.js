@@ -1,9 +1,10 @@
+// routes/stockPriceRoutes.js
 const express = require('express');
-const router = express.Router();
-const stockPriceController = require('../controllers/stockPriceController');
+const { getStockPrice } = require('../controllers/stockController');
 
-router.post('/stockprices', stockPriceController.createStockPrice);
-router.get('/stockprices', stockPriceController.getStockPrices);
-router.get('/stockprices/:id', stockPriceController.getStockPriceById);
+const router = express.Router();
+
+// Route để lấy giá cổ phiếu theo mã
+router.get('/:symbol', getStockPrice);
 
 module.exports = router;

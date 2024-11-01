@@ -11,6 +11,7 @@ import UpdateAvatarPage from './pages/UpdateAvatarPage';
 import ArticleDetailPage from './pages/ArticleDetailPage';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import AnalysisPage from './pages/AnalysisPage';
+import MarketPage from './pages/MarketPage';
 function App() {
     return (
         <Router>
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/account/:id/update-avatar" element={<UpdateAvatarPage />} />
                 <Route path="/article/:articleId" element={<ArticleDetailPage />} />
                 <Route path="/analysis" element={<AnalysisPage />} />
+                <Route path="/markets" element={<MarketPage />} />
             </Routes>
         </Router>
     );

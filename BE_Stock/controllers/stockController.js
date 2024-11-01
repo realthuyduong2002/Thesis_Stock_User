@@ -1,17 +1,16 @@
-const Stock = require('../models/Stock');
+// controllers/stockController.js
+const yahooFinance = require('yahoo-finance2').default;
 
-exports.createStock = async (req, res) => {
-  const stock = new Stock(req.body);
-  await stock.save();
-  res.status(201).send(stock);
+const getStockPrice = async (req, res) => {
+    try {
+        const { symbol } = req.params; // Lấy mã cổ phiếu từ URL
+        const data = await yahooFinance.quote(symbol); // Gọi API của Yahoo Finance
+        
+        res.json(data); // Trả về dữ liệu cho frontend
+    } catch (error) {
+        console.error("Error fetching stock price:", error);
+        res.status(500).json({ error: "Failed to fetch stock price data" });
+    }
 };
 
-exports.getStocks = async (req, res) => {
-  const stocks = await Stock.find();
-  res.status(200).send(stocks);
-};
-
-exports.getStockById = async (req, res) => {
-  const stock = await Stock.findById(req.params.id);
-  res.status(200).send(stock);
-};
+module.exports = { getStockPrice };
