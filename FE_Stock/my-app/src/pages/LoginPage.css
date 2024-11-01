@@ -1,5 +1,3 @@
-/* LoginPage.css */
-
 .login-page {
     display: flex;
     height: 100vh;
@@ -29,7 +27,6 @@
     object-fit: cover;
 }
 
-/* Style for back button */
 .back-button {
     position: absolute;
     top: 20px;

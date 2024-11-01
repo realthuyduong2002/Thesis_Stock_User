@@ -7,9 +7,6 @@ import loginImage from '../assets/login.jpg';
 const LoginPage = () => (
     <div className="login-page">
         <div className="form-section">
-            <Link to="/" className="back-button">
-                <i className="fas fa-arrow-left"></i>
-            </Link>
             <LoginForm />
         </div>
         <div className="image-section">

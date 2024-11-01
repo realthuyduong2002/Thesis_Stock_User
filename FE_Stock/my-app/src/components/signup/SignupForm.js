@@ -15,7 +15,7 @@ const SignupForm = () => {
     const [month, setMonth] = useState('');
     const [day, setDay] = useState('');
     const [year, setYear] = useState('');
-    const [gender, setGender] = useState(''); // Thêm state cho gender
+    const [gender, setGender] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ const SignupForm = () => {
             return;
         }
 
-        // Tạo dateOfBirth từ các trường ngày, tháng, năm
+        // Create dateOfBirth from day, month, and year fields
         const selectedMonthIndex = months.indexOf(month) + 1;
         const formattedMonth = selectedMonthIndex < 10 ? `0${selectedMonthIndex}` : selectedMonthIndex;
         const formattedDay = day < 10 ? `0${day}` : day;
@@ -50,18 +50,18 @@ const SignupForm = () => {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password, dateOfBirth, gender }), // Gửi gender
+                body: JSON.stringify({ username, email, password, dateOfBirth, gender }), // Send gender
             });
 
             const data = await response.json();
             if (response.ok) {
                 setSuccess("Account created successfully!");
                 setError('');
-                // Lưu token và userId vào localStorage
+                // Save token and userId to localStorage
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('userId', data.userId);
-                // Chuyển hướng đến trang tài khoản hoặc trang chủ
-                navigate(`/account/${data.userId}`); // Hoặc navigate('/') để về trang chủ
+                // Redirect to account page or home page
+                navigate(`/account/${data.userId}`); // Or navigate('/') to go to the home page
             } else {
                 setError(data.message || 'Registration failed');
                 setSuccess('');

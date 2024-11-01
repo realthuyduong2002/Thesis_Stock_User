@@ -11,7 +11,7 @@ const AccountPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [avatarTimestamp, setAvatarTimestamp] = useState(new Date().getTime());
-    const [countryCode, setCountryCode] = useState(''); // Lưu trữ mã vùng
+    const [countryCode, setCountryCode] = useState('');
 
     const fetchUserData = () => {
         if (!id) {
@@ -25,7 +25,7 @@ const AccountPage = () => {
                 setUserData(response.data);
                 setLoading(false);
 
-                // Lấy mã vùng dựa trên quốc gia
+                // Get area codes based on country
                 if (response.data.country) {
                     fetchCountryCode(response.data.country);
                 }

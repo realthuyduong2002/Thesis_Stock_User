@@ -6,7 +6,7 @@ const UpdateAvatarPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(null); // Lưu trữ URL ảnh xem trước
+    const [previewUrl, setPreviewUrl] = useState(null);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -36,10 +36,10 @@ const UpdateAvatarPage = () => {
             });
             alert("Avatar updated successfully!");
     
-            // Lưu URL của avatar vào localStorage để Header có thể sử dụng
+            // Save the avatar's URL to localStorage so that the Header can use it
             localStorage.setItem('userAvatar', response.data.avatar);
             
-            // Điều hướng người dùng về trang Account Page sau khi upload thành công
+            // Navigate users to the Account Page after a successful upload
             navigate(`/account/${id}`);
         } catch (error) {
             console.error("Error uploading avatar:", error);

@@ -64,7 +64,7 @@ const StockTable = () => {
                     const isExisting = prevStocks.some(stock => stock.symbol === symbol);
                     if (isExisting) {
                         // Update existing stock data
-                        const updatedStocks = prevStocks.map(stock => 
+                        const updatedStocks = prevStocks.map(stock =>
                             stock.symbol === symbol
                                 ? {
                                     ...stock,
@@ -164,11 +164,11 @@ const StockTable = () => {
                 <table className="stock-table">
                     <thead>
                         <tr>
-                        <th>Stock Code</th>
-                        <th>Company Name</th>
-                        <th>Current Price</th>
-                        <th>Change (%)</th>
-                        <th>Volume</th>
+                            <th>Stock Code</th>
+                            <th>Company Name</th>
+                            <th>Current Price</th>
+                            <th>Change (%)</th>
+                            <th>Volume</th>
                         </tr>
                     </thead>
                     <tbody>
