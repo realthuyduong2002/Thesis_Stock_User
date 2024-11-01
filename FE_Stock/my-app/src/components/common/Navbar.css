@@ -1,23 +1,141 @@
+/* Navbar.css */
+
+/* Root Variables for Consistent Styling */
+:root {
+    --navbar-bg: #ffffff;
+    --navbar-text: #2c3e50;
+    --navbar-hover-bg: #3498db;
+    --navbar-hover-text: #ffffff;
+    --navbar-shadow: rgba(0, 0, 0, 0.1);
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar Container */
 .navbar {
     display: flex;
-    justify-content: center;
-    background-color: #accee9;
-    padding: 15px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--navbar-bg);
+    padding: 15px 40px;
+    box-shadow: 0 2px 4px var(--navbar-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.navbar a {
-    color: #000000;
-    padding: 10px 20px;
+/* Brand Styling */
+.navbar-brand a {
+    color: var(--navbar-text);
+    font-size: 1.8em;
     font-weight: bold;
     text-decoration: none;
-    margin: 0 10px;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
-    border-radius: 5px; /* Slightly rounded corners */
-    
+    font-family: var(--font-family);
+    transition: color 0.3s ease;
 }
 
-.navbar a:hover {
-    background-color: #91b5e7;
-    color: #003049;
+.navbar-brand a:hover {
+    color: var(--navbar-hover-bg);
+}
+
+/* Navbar Links Container */
+.navbar-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+/* Individual Navbar Link Items */
+.navbar-links li {
+    margin-left: 25px;
+}
+
+/* Navbar Links Styling */
+.navbar-links a {
+    color: var(--navbar-text);
+    padding: 8px 15px;
+    font-weight: 500;
+    text-decoration: none;
+    font-family: var(--font-family);
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    position: relative;
+}
+
+/* Hover Effects for Links */
+.navbar-links a:hover {
+    background-color: var(--navbar-hover-bg);
+    color: var(--navbar-hover-text);
+    transform: translateY(-2px);
+}
+
+/* Active Link Styling */
+.navbar-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: var(--navbar-hover-bg);
+    transition: width 0.3s ease;
+}
+
+.navbar-links a.active::after {
+    width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+
+    .navbar-links li {
+        margin-left: 15px;
+    }
+
+    .navbar-brand a {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .navbar-links li {
+        margin: 10px 0;
+    }
+
+    .navbar-links a {
+        width: 100%;
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px 15px;
+    }
+
+    .navbar-brand a {
+        font-size: 1.3em;
+    }
+
+    .navbar-links li {
+        margin: 8px 0;
+    }
+
+    .navbar-links a {
+        padding: 8px 10px;
+    }
 }
