@@ -73,32 +73,33 @@ const UpdatePersonalDetailsPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         try {
-            const formData = new FormData();
-
-            formData.append('firstName', userData.firstName);
-            formData.append('lastName', userData.lastName);
-            formData.append('preferredName', userData.preferredName);
-            formData.append('dateOfBirth', userData.dateOfBirth);
-            formData.append('gender', userData.gender);
-            formData.append('phoneNumber', countryCode + userData.phoneNumber);
-            formData.append('country', userData.country);
-
-            const response = await axios.put(`http://localhost:4000/api/users/${id}`, formData, {
+            const updatedData = {
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                preferredName: userData.preferredName,
+                dateOfBirth: userData.dateOfBirth,
+                gender: userData.gender,
+                phoneNumber: countryCode + userData.phoneNumber,
+                country: userData.country,
+            };
+    
+            const response = await axios.put(`http://localhost:4000/api/users/${id}`, updatedData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-
+    
+            console.log(response.data); // Confirm the response from the server
             alert('Personal details updated successfully!');
             navigate(`/account/${id}`);
         } catch (error) {
             console.error('Error updating user details:', error);
             setError('Failed to update personal details');
         }
-    };
+    };       
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
