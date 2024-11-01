@@ -77,14 +77,16 @@ const HomePage = () => {
     
                 const responses = await Promise.all(stockPromises);
     
-                // Check if data is in the expected structure, modify accordingly if necessary
                 const stockData = responses.map((response, index) => {
                     const data = response.data; // Check the structure here
                     return {
                         symbol: stockSymbols[index],
-                        price: data.price, // Adjust based on console log
-                        change: data.change,
-                        volume: data.volume
+                        name: data.name,
+                        price: data.price,
+                        exchange: data.exchange,
+                        currency: data.currency,
+                        change: data.change, // if available
+                        volume: data.volume, // if available
                     };
                 });
                 setStockData(stockData);
@@ -305,35 +307,41 @@ const HomePage = () => {
 
                 {/* Thêm Stock Market Sidebar */}
                 <aside className="stock-sidebar">
-                    <div className="stock-widget">
-                        <h2 className="stock-widget-title">Market Overview</h2>
-                        {stockLoading && <p className="loading">Loading stocks...</p>}
-                        {stockError && <p className="error-message">{stockError}</p>}
-                        {!stockLoading && !stockError && (
-                            <div className="stock-list">
-                                {stockData.map((stock) => (
-                                    <div key={stock.symbol} className="stock-item">
-                                        <div className="stock-header">
-                                            <span className="stock-symbol">{stock.symbol}</span>
-                                            <span className={`stock-price ${stock.change >= 0 ? 'positive' : 'negative'}`}>
-                                                ${stock.price?.toFixed(2)}
-                                            </span>
-                                        </div>
-                                        <div className="stock-details">
-                                            <span className={`stock-change ${stock.change >= 0 ? 'positive' : 'negative'}`}>
-                                                {stock.change >= 0 ? <FaCaretUp /> : <FaCaretDown />}
-                                                {Math.abs(stock.change)?.toFixed(2)}%
-                                            </span>
-                                            <span className="stock-volume">
-                                                Vol: {stock.volume?.toLocaleString()}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+    <div className="stock-widget">
+        <h2 className="stock-widget-title">Market Overview</h2>
+        {stockLoading && <p className="loading">Loading stocks...</p>}
+        {stockError && <p className="error-message">{stockError}</p>}
+        {!stockLoading && !stockError && (
+            <div className="stock-list">
+                {stockData.map((stock) => (
+                    <div key={stock.symbol} className="stock-item">
+                        <div className="stock-header">
+                            <span className="stock-symbol">{stock.symbol}</span>
+                            <span className="stock-name">{stock.name}</span>
+                            <span className="stock-exchange">({stock.exchange})</span>
+                        </div>
+                        <div className="stock-details">
+                            <span className={`stock-price ${stock.change >= 0 ? 'positive' : 'negative'}`}>
+                                ${stock.price?.toFixed(2)} {stock.currency}
+                            </span>
+                            {stock.change && (
+                                <span className={`stock-change ${stock.change >= 0 ? 'positive' : 'negative'}`}>
+                                    {stock.change >= 0 ? <FaCaretUp /> : <FaCaretDown />}
+                                    {Math.abs(stock.change)?.toFixed(2)}%
+                                </span>
+                            )}
+                            {stock.volume && (
+                                <span className="stock-volume">
+                                    Vol: {stock.volume?.toLocaleString()}
+                                </span>
+                            )}
+                        </div>
                     </div>
-                </aside>
+                ))}
+            </div>
+        )}
+    </div>
+</aside>
             </div>
             <Footer />
         </div>

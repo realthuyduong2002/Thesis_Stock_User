@@ -268,21 +268,36 @@
     background: #f1f5f9;
 }
 
+/* Stock Symbol Styling */
 .stock-symbol {
     font-size: 1.1em;
     font-weight: 600;
     color: #2d3748;
+    display: inline-block;
+    margin-right: 0.5rem; /* Adds space between symbol and name */
 }
 
+/* Stock Name Styling */
+.stock-name {
+    font-size: 1em;
+    color: #4a5568;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* Stock Price Styling */
 .stock-price {
     font-size: 1em;
     font-weight: 500;
     color: #4a5568;
+    margin-top: 0.25rem; /* Adds spacing between name and price */
 }
 
-.stock-change {
+/* Stock Currency Styling */
+.stock-currency {
     font-size: 0.9em;
     color: #718096;
+    margin-left: 0.25rem; /* Adds space between price and currency */
 }
 
 /* Responsive Adjustments */
