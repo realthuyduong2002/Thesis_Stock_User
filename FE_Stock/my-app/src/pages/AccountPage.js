@@ -51,8 +51,9 @@ const AccountPage = () => {
     };
 
     useEffect(() => {
+        console.log("Fetching user data...");
         fetchUserData();
-    }, [id]);
+    }, [id]);    
 
     useEffect(() => {
         if (userData?.avatar) {
