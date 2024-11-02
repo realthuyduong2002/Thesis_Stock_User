@@ -146,11 +146,10 @@ const AIConsultingPage = () => {
       </div>
       <div className={styles.mainContent}>
         <header className={styles.header}>
-          <img src={logo} alt="Stock Insight Logo" className={styles.logo} />
+          <Link to="/">
+            <img src={logo} alt="Stock Insight Logo" className={styles.logo} />
+          </Link>
           <nav className={styles.navMenu}>
-            <a href="/" className={styles.navLink}>
-              Home
-            </a>
             <a href="/" className={styles.navLink}>
               News
             </a>

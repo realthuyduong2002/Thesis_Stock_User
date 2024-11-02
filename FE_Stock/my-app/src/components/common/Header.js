@@ -7,7 +7,6 @@ import settingsIcon from '../../assets/settings.png';
 import privacyIcon from '../../assets/privacy.png';
 import helpIcon from '../../assets/help.png';
 import addSwitchIcon from '../../assets/add-switch.png';
-import styles from '../common/Header.css';
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);

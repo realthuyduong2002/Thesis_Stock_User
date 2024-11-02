@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import LoginForm from '../components/login/LoginForm';
-import './LoginPage.css';
+import '../pages/LoginPage.css';
 import loginImage from '../assets/login.jpg';
 
 const LoginPage = () => (

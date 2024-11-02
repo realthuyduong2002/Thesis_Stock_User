@@ -184,8 +184,8 @@ const HomePage = () => {
 
     return (
         <div className="homepage">
-            <Header />
             <Navbar />
+            <Header />    
             <div className="page-content">
                 <main className="main-content">
                     {loading && <p className="loading">Loading news...</p>}

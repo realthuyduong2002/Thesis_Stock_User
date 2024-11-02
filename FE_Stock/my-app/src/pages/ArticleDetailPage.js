@@ -18,8 +18,8 @@ const ArticleDetailPage = () => {
     if (!article) {
         return (
             <div>
-                <Header />
                 <Navbar />
+                <Header />
                 <main className="main-content">
                     <button onClick={handleBack} className="back-button">
                         <FaArrowLeft /> Back to News
@@ -33,8 +33,8 @@ const ArticleDetailPage = () => {
 
     return (
         <div>
-            <Header />
             <Navbar />
+            <Header />
             <main className="main-content">
                 <button onClick={handleBack} className="back-button">
                     <FaArrowLeft />

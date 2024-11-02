@@ -7,8 +7,8 @@ import Footer from '../components/common/Footer';
 const MarketPage = () => {
     return (
         <div>
-            <Header />
             <Navbar />
+            <Header />
             <StockTable />
             <Footer />
         </div>

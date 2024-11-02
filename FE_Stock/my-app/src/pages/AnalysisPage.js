@@ -7,8 +7,8 @@ import Footer from '../components/common/Footer';
 const AnalysisPage = () => {
     return (
         <div>
-            <Header />
             <Navbar />
+            <Header />
             <iframe
                 src="https://thesis-dashboard.onrender.com/"
                 title="Stock Price Predictions Dashboard"

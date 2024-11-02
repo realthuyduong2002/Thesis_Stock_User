@@ -1,5 +1,3 @@
-// Navbar.jsx
-
 import React from 'react';
 import '../common/Navbar.css';
 import { Link, useLocation } from 'react-router-dom';
@@ -10,7 +8,10 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/">Stock Insight</Link>
+                <Link to="/">
+                    <span className="brand-stock">Stock</span>
+                    <span className="brand-insight">Insight</span>
+                </Link>
             </div>
             <ul className="navbar-links">
                 <li>
