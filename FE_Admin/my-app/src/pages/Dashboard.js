@@ -5,7 +5,6 @@ import LineChart from '../components/LineChart';
 import StockTable from '../components/StockTable';
 import DashboardCard from '../components/DashboardCard';
 import '../pages/Dashboard.css';
-
 const Dashboard = () => {
     return (
         <div className="dashboard">
