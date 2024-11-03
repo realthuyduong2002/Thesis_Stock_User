@@ -1,12 +1,19 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
+import UserList from './pages/UserList';
 import './App.css';
 
 function App() {
   return (
-    <div className="app-container">
-      <Dashboard />
-    </div>
+    <Router>
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/users" element={<UserList />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

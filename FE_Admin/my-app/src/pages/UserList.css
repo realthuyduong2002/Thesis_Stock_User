@@ -1,0 +1,103 @@
+/* Container for sidebar, header, and main content */
+.user-list-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 80px;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    height: 100vh;
+    position: fixed;
+}
+
+/* Header styling */
+.header {
+    width: calc(100% - 80px); /* Adjust for sidebar width */
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 80px; /* Align with sidebar */
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+/* Content area below the header */
+.user-list {
+    flex-grow: 1;
+    margin-top: 80px; /* Adjust for header height */
+    margin-left: 80px; /* Align with sidebar */
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* User table styling */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.user-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.user-table td {
+    background-color: #ffffff;
+}
+
+/* Default left alignment for all table cells */
+.user-table th, .user-table td {
+    text-align: left;
+    padding: 12px;
+}
+
+/* Center-align for specific columns */
+.user-table th:nth-child(1), .user-table td:nth-child(1) { /* Number column */
+    padding-left: 30px;
+    padding-right: 24px; /* Add extra space on the right */
+}
+
+.user-table td:nth-child(1) {
+    padding-left: 55px;
+}
+
+.user-table th:nth-child(4), .user-table td:nth-child(4) { /* Status column */
+    text-align: center;
+}
+
+/* Status styling */
+.status {
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+}
+
+.status.active {
+    background-color: #28a745;
+}
+
+.status.inactive {
+    background-color: #dc3545;
+}

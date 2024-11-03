@@ -1,5 +1,3 @@
-// controllers/userController.js
-
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -32,7 +30,7 @@ exports.updateProfile = async (req, res) => {
             return res.status(404).json({ msg: 'User not found' });
         }
 
-        // Cập nhật các thông tin nếu có
+        // Update information if available
         if (firstName) user.firstName = firstName;
         if (lastName) user.lastName = lastName;
         if (preferredName) user.preferredName = preferredName;
@@ -48,7 +46,7 @@ exports.updateProfile = async (req, res) => {
             user.dateOfBirth = new Date(dateOfBirth);
         }
 
-        // Xử lý avatar nếu có file
+        // Process avatar if file exists
         if (req.file) {
             const avatarUrl = await uploadAvatar(req.file.path);
             user.avatar = avatarUrl;
@@ -120,7 +118,7 @@ exports.register = async (req, res) => {
     const { username, email, password, dateOfBirth } = req.body;
 
     try {
-        // Kiểm tra xem người dùng đã tồn tại chưa
+        // Check if user already exists
         let user = await User.findOne({ email });
         if (user) {
             return res.status(400).json({ message: 'User already exists' });
@@ -133,27 +131,27 @@ exports.register = async (req, res) => {
             dateOfBirth,
         });
 
-        // Băm mật khẩu
+        // Password hashing
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
         await user.save();
 
-        // Tạo JWT Payload
+        // Generate JWT Payload
         const payload = {
             user: {
                 id: user.id,
             },
         };
 
-        // Ký JWT
+        // Sign JWT
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
             { expiresIn: '1h' },
             (err, token) => {
                 if (err) throw err;
-                res.status(201).json({ token, userId: user.id }); // Trả về cả token và userId
+                res.status(201).json({ token, userId: user.id }); // Returns both token and userId
             }
         );
     } catch (error) {
@@ -167,26 +165,26 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Kiểm tra xem người dùng có tồn tại không
+        // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
 
-        // So sánh mật khẩu
+        // Compare passwords
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
 
-        // Tạo JWT Payload
+        // Generate JWT Payload
         const payload = {
             user: {
                 id: user.id,
             },
         };
 
-        // Ký JWT
+        // Sign JWT
         jwt.sign(
             payload,
             process.env.JWT_SECRET,
@@ -223,24 +221,24 @@ cloudinary.config({
 async function uploadAvatar(filePath) {
     try {
         const result = await cloudinary.uploader.upload(filePath, { folder: "avatars" });
-        return result.secure_url; // URL của ảnh đã lưu trên Cloudinary
+        return result.secure_url; // URL of image saved on Cloudinary
     } catch (error) {
         console.error("Error uploading avatar:", error);
     }
 }
 
 exports.uploadUserAvatar = async (req, res) => {
-    const userId = req.params.id; // Sử dụng req.params.id thay cho req.user.id
+    const userId = req.params.id; // Use req.params.id instead of req.user.id
 
     try {
         if (!req.file) {
             return res.status(400).json({ msg: 'No file uploaded' });
         }
 
-        // Upload ảnh lên Cloudinary
+        // Upload photos to Cloudinary
         const avatarUrl = await uploadAvatar(req.file.path);
 
-        // Tìm user và cập nhật URL avatar
+        // Find user and update avatar URL
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
@@ -249,7 +247,7 @@ exports.uploadUserAvatar = async (req, res) => {
         user.avatar = avatarUrl;
         await user.save();
 
-        // Xóa file tạm sau khi upload thành công
+        // Delete temporary files after successful upload
         fs.unlink(req.file.path, (err) => {
             if (err) console.error("Error deleting temp file:", err);
         });
@@ -257,6 +255,16 @@ exports.uploadUserAvatar = async (req, res) => {
         res.status(200).json({ msg: 'Avatar updated successfully', avatarUrl });
     } catch (error) {
         console.error('Error uploading avatar:', error);
+        res.status(500).json({ msg: 'Server Error' });
+    }
+};
+
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find().select('-password'); // Exclude passwords
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error in getAllUsers:', error);
         res.status(500).json({ msg: 'Server Error' });
     }
 };
