@@ -1,0 +1,40 @@
+.stock-table-container {
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    box-sizing: border-box; /* Ensure padding does not cause overflow */
+}
+
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-table th,
+.stock-table td {
+    padding: 12px;
+    text-align: left;
+}
+
+.stock-table th {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+.stock-table td {
+    border-top: 1px solid #dee2e6;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 12px;
+}
+
+.status.active {
+    background-color: #28a745;
+    color: white;
+}
