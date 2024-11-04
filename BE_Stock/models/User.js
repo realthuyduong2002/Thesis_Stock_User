@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -67,6 +66,11 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String,
         default: '',
+    },
+    status: {
+        type: String,
+        enum: ['Active', 'Inactive'],
+        default: 'Active',
     },
 });
 

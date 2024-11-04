@@ -1,8 +1,6 @@
-// routes/userRoutes.js
-
 const express = require('express');
 const router = express.Router();
-const { auth, admin } = require('../middleware/auth'); // Import middleware admin
+const { auth, admin } = require('../middleware/auth');
 const { uploadUserAvatar } = require('../controllers/userController');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
@@ -26,7 +24,7 @@ router.post('/reset-password', resetPassword);
 
 // Protected routes
 router.get('/me', auth, getProfile);
-router.put('/:id', auth, updateProfile); // Bảo vệ route này nếu cần
+router.put('/:id', auth, updateProfile);
 
 // Get user by ID (public)
 router.get('/:id', getUserById);
@@ -35,7 +33,7 @@ router.get('/:id', getUserById);
 router.post('/:id/upload-avatar', auth, upload.single('avatar'), uploadUserAvatar);
 
 // Admin routes
-router.get('/', auth, admin, getAllUsers); // Lấy tất cả người dùng
-router.put('/admin/:id', auth, admin, updateUser); // Cập nhật người dùng bởi admin
+router.get('/', auth, admin, getAllUsers); // Get all users
+router.put('/admin/:id', auth, admin, updateUser); // User Updates by admin
 
 module.exports = router;

@@ -6,6 +6,16 @@
     flex-grow: 1;
     padding: 20px;
     box-sizing: border-box;
+    margin-top: 80px; /* Add space equal to the header height */
+}
+
+/* Optional: make the header sticky */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure it stays on top */
+    background-color: #fff;
+    padding: 20px 0;
 }
 
 .dashboard-content > .header,
