@@ -4,7 +4,6 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import UserList from './pages/UserList';
 import Login from './pages/Login';
-import Signup from './pages/Signup';
 import UserDetails from './pages/UserDetails';
 import './App.css';
 
@@ -16,7 +15,6 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Dashboard />} />
             <Route path="/users" element={<UserList />} />
             <Route path="/users/:userId" element={<UserDetails />} />
