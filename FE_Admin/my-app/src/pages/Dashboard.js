@@ -9,7 +9,6 @@ import '../pages/Dashboard.css';
 const Dashboard = () => {
     return (
         <div className="dashboard">
-            <Sidebar />
             <div className="dashboard-content">
                 <Header />
                 <div className="centered-content">

@@ -1,12 +1,15 @@
+// src/pages/UserDetails.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
 import styles from '../pages/UserDetails.module.css';
 
 const UserDetails = () => {
     const { userId } = useParams();
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -18,39 +21,61 @@ const UserDetails = () => {
                     }
                 });
                 setUser(response.data);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching user details:", error);
+                setError('Error fetching user details');
+                setLoading(false);
             }
         };
 
         fetchUserDetails();
     }, [userId]);
 
-    if (!user) {
-        return <p>Loading...</p>;
+    if (loading) {
+        return (
+            <div className={styles['user-details-page']}>
+                <Header />
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className={styles['user-details-page']}>
+                <Header />
+                <p>{error}</p>
+            </div>
+        );
     }
 
     return (
         <div className={styles['user-details-page']}>
-            <Sidebar />
+            <Header />
             <div className={styles['user-details-container']}>
                 <div className={styles['user-info-section']}>
                     <h2>User Information</h2>
                     <div className={styles['user-info']}>
-                        <p><strong>user_id:</strong> {user._id}</p>
-                        <p><strong>username:</strong> {user.username}</p>
-                        <p><strong>email:</strong> {user.email}</p>
-                        <p><strong>First name:</strong> {user.firstName}</p>
-                        <p><strong>Last name:</strong> {user.lastName}</p>
-                        <p><strong>Preferred name:</strong> {user.preferredName}</p>
-                        <p><strong>Date of birth:</strong> {user.dob}</p>
+                        <p><strong>User ID:</strong> {user._id}</p>
+                        <p><strong>Username:</strong> {user.username}</p>
+                        <p><strong>Email:</strong> {user.email}</p>
+                        <p><strong>First Name:</strong> {user.firstName}</p>
+                        <p><strong>Last Name:</strong> {user.lastName}</p>
+                        <p><strong>Preferred Name:</strong> {user.preferredName}</p>
+                        <p><strong>Date of Birth:</strong> {new Date(user.dob).toLocaleDateString()}</p>
                         <p><strong>Gender:</strong> {user.gender}</p>
-                        <p><strong>Phone number:</strong> {user.phoneNumber}</p>
+                        <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
                         <p><strong>Country:</strong> {user.country}</p>
                     </div>
-                    <div className={styles['status']}>
-                        <p><strong>Status:</strong> <span className={`status ${user.status ? user.status.toLowerCase() : ''}`}>{user.status}</span></p>
-                        <a href="/update-status">Update status</a>
+                    <div className={styles['status-section']}>
+                        <p>
+                            <strong>Status:</strong> 
+                            <span className={`status ${user.status ? user.status.toLowerCase() : ''}`}>
+                                {user.status}
+                            </span>
+                        </p>
+                        <Link to="/update-status">Update Status</Link>
                     </div>
                 </div>
                 <div className={styles['avatar-section']}>

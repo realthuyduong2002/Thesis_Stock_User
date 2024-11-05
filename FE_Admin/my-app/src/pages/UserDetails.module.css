@@ -1,24 +1,27 @@
-/* Flex container for the entire page */
+/* src/pages/UserDetails.module.css */
+
 .user-details-page {
-    display: flex;
-    min-height: 100vh;
+    padding: 20px;
+    margin-left: 250px; /* Căn chỉnh với Sidebar width */
+    margin-top: 80px; /* Căn chỉnh với Header height */
     background-color: #f7f7f7;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
 }
 
-/* Main container for user details and avatar */
 .user-details-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     padding: 20px;
-    max-width: 800px;
+    max-width: 900px;
     background-color: #fff;
-    margin: 20px auto;
+    margin: 0 auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* User info section */
 .user-info-section {
     flex: 1;
     padding-right: 20px;
@@ -31,7 +34,6 @@
     font-weight: bold;
 }
 
-/* User information styling */
 .user-info p {
     font-size: 16px;
     color: #555;
@@ -43,12 +45,11 @@
     color: #333;
 }
 
-/* Status styling */
-.status {
+.status-section {
     margin-top: 20px;
 }
 
-.status span {
+.status {
     display: inline-block;
     padding: 8px 12px;
     border-radius: 12px;
@@ -56,15 +57,27 @@
     font-weight: bold;
 }
 
-.status .active {
+.status.active {
     background-color: #28a745;
 }
 
-.status .inactive {
+.status.inactive {
     background-color: #dc3545;
 }
 
-/* Avatar section styling */
+.status-section a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.status-section a:hover {
+    color: #0056b3;
+}
+
 .avatar-section {
     display: flex;
     align-items: center;
@@ -83,16 +96,20 @@
     object-fit: cover;
 }
 
-/* Link styling */
-.status a {
-    display: inline-block;
-    margin-top: 10px;
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .user-details-container {
+        flex-direction: column;
+        align-items: center;
+    }
 
-.status a:hover {
-    color: #0056b3;
+    .user-info-section {
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .avatar-section {
+        width: 120px;
+        height: 120px;
+    }
 }

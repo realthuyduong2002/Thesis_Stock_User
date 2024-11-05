@@ -1,11 +1,7 @@
+// src/components/Sidebar.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import callIcon from '../assets/call.png';
-import avatar from '../assets/avatar.png';
-import menuIcon from '../assets/menu.png';
-import paperIcon from '../assets/paper.png';
-import userIcon from '../assets/user.png';
+import { FaHome, FaUser, FaPhone, FaFileAlt, FaCog, FaUserCircle } from 'react-icons/fa';
 import '../components/Sidebar.css';
 
 const Sidebar = () => {
@@ -13,12 +9,12 @@ const Sidebar = () => {
 
     return (
         <div className="sidebar">
-            <img src={logo} alt="Logo" className="logo" />
-            <img src={menuIcon} alt="Menu" onClick={() => navigate('/')} style={{ cursor: 'pointer' }} />
-            <img src={userIcon} alt="User" onClick={() => navigate('/users')} style={{ cursor: 'pointer' }} />
-            <img src={callIcon} alt="Call" />
-            <img src={paperIcon} alt="Paper" />
-            <img src={avatar} alt="Avatar" className="avatar" onClick={() => navigate('/login')} style={{ cursor: 'pointer' }} />
+            <FaHome className="icon logo" size={30} onClick={() => navigate('/')} />
+            <FaUser className="icon" size={24} onClick={() => navigate('/users')} />
+            <FaPhone className="icon" size={24} onClick={() => navigate('/calls')} />
+            <FaFileAlt className="icon" size={24} onClick={() => navigate('/papers')} />
+            <FaCog className="icon" size={24} onClick={() => navigate('/settings')} />
+            <FaUserCircle className="icon avatar" size={24} onClick={() => navigate('/login')} />
         </div>
     );
 };
