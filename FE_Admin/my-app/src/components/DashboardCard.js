@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../components/DashboardCard.css';
 
-const DashboardCard = () => {
+const DashboardCard = ({ stockCount }) => {
     const [userCount, setUserCount] = useState(0);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const DashboardCard = () => {
             </div>
             <div className="card">
                 <span className="card-title">Stocks</span>
-                <strong>1,000</strong>
+                <strong>{stockCount}</strong>
             </div>
             <div className="card">
                 <span className="card-title">Transactions</span>
