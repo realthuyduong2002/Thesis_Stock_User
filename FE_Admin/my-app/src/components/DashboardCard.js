@@ -20,21 +20,21 @@ const DashboardCard = () => {
         };
 
         fetchUserCount();
-    }, []); // The empty dependency array ensures this runs once when the component mounts
+    }, []);
 
     return (
         <div className="dashboard-cards">
             <div className="card">
                 <span className="card-title">Users</span>
-                <strong>{userCount}</strong> {/* Display the actual user count */}
+                <strong>{userCount}</strong>
             </div>
             <div className="card">
                 <span className="card-title">Stocks</span>
-                <strong>1,000</strong> {/* Update this with actual data if needed */}
+                <strong>1,000</strong>
             </div>
             <div className="card">
                 <span className="card-title">Transactions</span>
-                <strong>1,000</strong> {/* Update this with actual data if needed */}
+                <strong>1,000</strong>
             </div>
         </div>
     );

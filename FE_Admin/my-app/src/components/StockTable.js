@@ -1,14 +1,10 @@
-// src/components/StockTable.js
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import axios from 'axios';
-import './StockTable.css';
+import '../components/StockTable.css';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 const StockTable = ({ isAdmin }) => {
-    // Các state và logic tương tự như phía client
-    // Bạn có thể tùy chỉnh thêm các chức năng cho Admin ở đây
-    // Ví dụ: thêm chức năng chỉnh sửa, xóa cổ phiếu, v.v.
 
     const [stocks, setStocks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,7 +26,7 @@ const StockTable = ({ isAdmin }) => {
 
     const RAPIDAPI_KEY = process.env.REACT_APP_RAPIDAPI_KEY;
 
-    // Hàm lưu và tải dữ liệu từ localStorage
+    // Functions that save and load data from localStorage
     const saveStocksToLocalStorage = (stocksData) => {
         try {
             const serializedData = JSON.stringify(stocksData);
@@ -51,7 +47,7 @@ const StockTable = ({ isAdmin }) => {
         }
     };
 
-    // Hàm fetch dữ liệu cổ phiếu từ API
+    // Function fetch stock data from API
     const fetchStockData = async (symbol) => {
         const options = {
             method: 'GET',
@@ -78,9 +74,8 @@ const StockTable = ({ isAdmin }) => {
                                     price: data.lastPrice !== undefined ? data.lastPrice : stock.price,
                                     change: data.percentChange !== undefined ? (data.percentChange * 100) : stock.change,
                                     volume: data.volume !== undefined ? data.volume.toLocaleString() : stock.volume,
-                                    // Thêm các trường dữ liệu chi tiết khác
+                                    // Add more detailed data fields
                                     priceChange: data.priceChange || stock.priceChange,
-                                    // ... các trường khác
                                 }
                                 : stock
                         );
@@ -88,16 +83,15 @@ const StockTable = ({ isAdmin }) => {
                         return updatedStocks;
                     }
 
-                    // Thêm cổ phiếu mới nếu chưa tồn tại
+                    // Add new stocks if they don't already exist
                     const newStock = {
                         symbol: data.symbol || symbol,
                         companyName: data.symbolName || symbol,
                         price: data.lastPrice !== undefined ? data.lastPrice : 'N/A',
                         change: data.percentChange !== undefined ? (data.percentChange * 100) : 0,
                         volume: data.volume !== undefined ? data.volume.toLocaleString() : '0',
-                        // Khởi tạo các trường dữ liệu chi tiết khác
+                        // Initialize other detailed data fields
                         priceChange: data.priceChange || 'N/A',
-                        // ... các trường khác
                     };
                     const updatedStocks = [...prevStocks, newStock];
                     saveStocksToLocalStorage(updatedStocks);
@@ -111,7 +105,7 @@ const StockTable = ({ isAdmin }) => {
         }
     };
 
-    // Hàm fetch tất cả dữ liệu cổ phiếu với kiểm soát tốc độ
+    // Function fetch all stock data with speed control
     const fetchAllStockData = useCallback(async () => {
         if (isFetchingRef.current) {
             console.warn('Fetch operation already in progress.');
@@ -125,7 +119,7 @@ const StockTable = ({ isAdmin }) => {
             for (let i = 0; i < stockSymbols.length; i++) {
                 const symbol = stockSymbols[i];
                 await fetchStockData(symbol);
-                // Đợi 1.5 giây giữa các yêu cầu để tuân thủ giới hạn tốc độ
+                // Wait 1.5 seconds between requests to comply with the speed limit
                 await new Promise(resolve => setTimeout(resolve, 1500));
             }
         } catch (error) {
@@ -148,12 +142,12 @@ const StockTable = ({ isAdmin }) => {
 
         const interval = setInterval(() => {
             fetchAllStockData();
-        }, 15 * 60 * 1000); // Làm mới mỗi 15 phút
+        }, 15 * 60 * 1000); // Refresh every 15 minutes
 
         return () => clearInterval(interval);
     }, [fetchAllStockData]);
 
-    // Handler để mở rộng hoặc thu gọn hàng
+    // Handler to expand or collapse rows
     const handleRowClick = async (symbol) => {
         const isExpanded = expandedRows.includes(symbol);
         if (isExpanded) {
@@ -166,7 +160,7 @@ const StockTable = ({ isAdmin }) => {
         }
     };
 
-    // Hàm fetch dữ liệu biểu đồ từ API
+    // Function fetch chart data from API
     const fetchChartData = async (symbol) => {
         setLoadingChart(true);
         const fixedRange = '1d';
@@ -340,7 +334,7 @@ const StockTable = ({ isAdmin }) => {
                             <th>Current Price</th>
                             <th>Change (%)</th>
                             <th>Volume</th>
-                            {isAdmin && <th>Actions</th>} {/* Thêm cột Actions cho Admin */}
+                            {isAdmin && <th>Actions</th>} {/* Add Actions column for Admin */}
                         </tr>
                     </thead>
                     <tbody>
@@ -372,9 +366,9 @@ const StockTable = ({ isAdmin }) => {
                                     <td>{stock.volume}</td>
                                     {isAdmin && (
                                         <td>
-                                            {/* Thêm các nút hành động cho Admin, ví dụ: chỉnh sửa, xóa */}
-                                            <button onClick={(e) => { e.stopPropagation(); /* Xử lý chỉnh sửa */ }}>Edit</button>
-                                            <button onClick={(e) => { e.stopPropagation(); /* Xử lý xóa */ }}>Delete</button>
+                                            {/* Add action buttons for Admin, e.g. edit, delete */}
+                                            <button onClick={(e) => { e.stopPropagation(); }}>Edit</button>
+                                            <button onClick={(e) => { e.stopPropagation(); }}>Delete</button>
                                         </td>
                                     )}
                                 </tr>
@@ -405,7 +399,7 @@ const StockTable = ({ isAdmin }) => {
                                                     <div><strong>Low Price (1y):</strong> ${stock.lowPrice1y || 'N/A'}</div>
                                                     <div><strong>High Price (1y):</strong> ${stock.highPrice1y || 'N/A'}</div>
                                                 </div>
-                                                {/* Phần biểu đồ */}
+                                                {/* Chart section */}
                                                 <div className="chart-container">
                                                     <h4>1 Day Price Chart</h4>
                                                     {loadingChart && (

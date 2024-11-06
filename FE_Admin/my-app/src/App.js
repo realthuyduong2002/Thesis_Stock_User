@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
@@ -9,7 +9,26 @@ import Header from './components/Header';
 import './App.css';
 
 function App() {
-  const isAuthenticated = Boolean(localStorage.getItem('token'));
+  const [isAuthenticated, setIsAuthenticated] = useState(Boolean(localStorage.getItem('token')));
+
+  // Check and update the login status when there is a change from localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(Boolean(localStorage.getItem('token')));
+    };
+
+    // Listen for change events in localStorage
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  // Function to update the login status after a successful login
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
 
   return (
     <Router>
@@ -18,10 +37,10 @@ function App() {
         <div className="main-content">
           <Header />
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
             <Route
               path="/"
-              element={<Navigate to="/login" />}
+              element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
             />
             <Route
               path="/dashboard"

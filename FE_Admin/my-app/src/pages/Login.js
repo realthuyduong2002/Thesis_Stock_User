@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../components/Auth.css';
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -16,6 +16,7 @@ const Login = () => {
             localStorage.setItem('token', token); // Store token in localStorage
 
             if (role === 'admin') {
+                onLoginSuccess();
                 navigate('/dashboard'); // Redirect to the dashboard for admins
             } else {
                 alert('Access denied: Admins only');

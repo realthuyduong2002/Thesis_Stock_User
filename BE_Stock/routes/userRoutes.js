@@ -28,16 +28,16 @@ router.post('/reset-password', resetPassword);
 router.get('/me', auth, getProfile);
 router.put('/:id', auth, updateProfile);
 
+// Admin routes
+router.get('/count', countUsers); // Count users
+router.get('/', auth, admin, getAllUsers); // Get all users
+router.put('/admin/:id', auth, admin, updateUser);
+router.put('/:id/status', auth, admin, updateStatus); // User Updates Status by admin
+
 // Get user by ID (public)
 router.get('/:id', getUserById);
 
 // Route upload avatar
 router.post('/:id/upload-avatar', auth, upload.single('avatar'), uploadUserAvatar);
-
-// Admin routes
-router.get('/', auth, admin, getAllUsers); // Get all users
-router.put('/admin/:id', auth, admin, updateUser); // User Updates by admin
-router.put('/:id/status', auth, admin, updateStatus);
-router.get('/count', countUsers);
 
 module.exports = router;
