@@ -14,9 +14,9 @@ const Login = () => {
             const response = await axios.post('http://localhost:4000/api/users/login', { email, password });
             const { token, role } = response.data;
             localStorage.setItem('token', token); // Store token in localStorage
-            
+
             if (role === 'admin') {
-                navigate('/users'); // Redirect to user list for admins
+                navigate('/dashboard'); // Redirect to the dashboard for admins
             } else {
                 alert('Access denied: Admins only');
             }

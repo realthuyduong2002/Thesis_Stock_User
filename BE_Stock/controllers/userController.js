@@ -335,3 +335,33 @@ exports.updateUser = async (req, res) => {
         res.status(500).json({ msg: 'Server Error', error: error.message });
     }
 };
+
+exports.updateStatus = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { status } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        user.status = status;
+        await user.save();
+
+        res.status(200).json({ msg: 'User status updated successfully', status: user.status });
+    } catch (error) {
+        console.error('Error in updateStatus:', error);
+        res.status(500).json({ msg: 'Server Error', error: error.message });
+    }
+};
+
+exports.countUsers = async (req, res) => {
+    try {
+        const count = await User.countDocuments();
+        res.status(200).json({ count });
+    } catch (error) {
+        console.error('Error fetching user count:', error);
+        res.status(500).json({ msg: 'Server Error' });
+    }
+};

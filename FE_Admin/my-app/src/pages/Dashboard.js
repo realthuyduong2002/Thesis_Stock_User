@@ -1,5 +1,4 @@
 import React from 'react';
-import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import LineChart from '../components/LineChart';
 import StockTable from '../components/StockTable';

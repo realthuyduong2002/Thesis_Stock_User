@@ -1,6 +1,7 @@
 .user-list-container {
     display: flex;
     height: 100vh;
+    width: 100%; /* Ensure the container takes up full width */
 }
 
 /* Sidebar styling */
@@ -15,35 +16,39 @@
     position: fixed;
 }
 
+/* Main content area */
+.main-content {
+    flex-grow: 1;
+    margin-left: 80px; /* Offset for sidebar width */
+    padding-top: 60px; /* Start content closer to the top, below the header */
+    padding: 20px;
+    width: calc(100% - 80px); /* Adjust width to fill remaining space */
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
 /* Header styling */
 .header {
-    width: calc(100% - 80px); /* Adjust for sidebar width */
+    position: fixed;
+    top: 0;
+    left: 80px; /* Align with sidebar */
+    width: calc(100% - 80px); /* Full width minus sidebar width */
+    height: 60px; /* Adjust height as needed */
     background-color: #ffffff;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
+    padding: 0 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-left: 80px; /* Align with sidebar */
-    position: fixed;
-    top: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1;
     box-sizing: border-box;
 }
 
-/* Content area below the header */
+/* Content area under the header */
 .user-list {
-    flex-grow: 1;
-    margin-top: 80px; /* Adjust for header height */
-    margin-left: 80px; /* Align with sidebar */
-    padding: 20px;
-    overflow-y: auto;
+    margin-top: 80px; /* Additional spacing for the header height */
 }
 
-/* User table styling */
 .user-table {
     width: 100%;
     border-collapse: collapse;
@@ -52,7 +57,7 @@
 .user-table th,
 .user-table td {
     padding: 12px;
-    text-align: center;
+    text-align: center; /* Center align content in both header and cells */
     border-bottom: 1px solid #dee2e6;
 }
 
@@ -61,31 +66,6 @@
     font-weight: bold;
 }
 
-.user-table td {
-    background-color: #ffffff;
-}
-
-/* Default left alignment for all table cells */
-.user-table th, .user-table td {
-    text-align: left;
-    padding: 12px;
-}
-
-/* Center-align for specific columns */
-.user-table th:nth-child(1), .user-table td:nth-child(1) { /* Number column */
-    padding-left: 30px;
-    padding-right: 24px; /* Add extra space on the right */
-}
-
-.user-table td:nth-child(1) {
-    padding-left: 55px;
-}
-
-.user-table th:nth-child(4), .user-table td:nth-child(4) { /* Status column */
-    text-align: center;
-}
-
-/* Status styling */
 .status {
     padding: 5px 10px;
     border-radius: 12px;
@@ -94,7 +74,7 @@
 }
 
 .status.active {
-    background-color: #28a745;
+    background-color: #6CCF94;
 }
 
 .status.inactive {

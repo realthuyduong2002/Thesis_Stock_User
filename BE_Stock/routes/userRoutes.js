@@ -14,6 +14,8 @@ const {
     getUserById,
     getAllUsers,
     updateUser,
+    updateStatus,
+    countUsers,
 } = require('../controllers/userController');
 
 // Public routes
@@ -35,5 +37,7 @@ router.post('/:id/upload-avatar', auth, upload.single('avatar'), uploadUserAvata
 // Admin routes
 router.get('/', auth, admin, getAllUsers); // Get all users
 router.put('/admin/:id', auth, admin, updateUser); // User Updates by admin
+router.put('/:id/status', auth, admin, updateStatus);
+router.get('/count', countUsers);
 
 module.exports = router;
