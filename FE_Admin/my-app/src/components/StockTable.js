@@ -67,7 +67,6 @@ const StockTable = ({
                                     <td>{stock.volume}</td>
                                     {isAdmin && (
                                         <td>
-                                            {/* Add action buttons for Admin, e.g., edit, delete */}
                                             <button onClick={(e) => { e.stopPropagation(); /* handle edit */ }}>Edit</button>
                                             <button onClick={(e) => { e.stopPropagation(); /* handle delete */ }}>Delete</button>
                                         </td>

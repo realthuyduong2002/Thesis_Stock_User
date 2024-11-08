@@ -194,7 +194,6 @@ const HomePage = () => {
                         <section className="news-container">
                             <h2 className="news-title">Latest Stock News</h2>
 
-                            {/* Giữ nguyên phần News Cards */}
                             <div className="news-card-slider">
                                 <button
                                     className="scroll-button left"
@@ -248,7 +247,6 @@ const HomePage = () => {
                                 </button>
                             </div>
 
-                            {/* Giữ nguyên phần News List */}
                             <div className="news-list-section">
                                 <ul className="news-list">
                                     {currentItems.map((article, index) => (
@@ -281,7 +279,6 @@ const HomePage = () => {
                         </section>
                     )}
 
-                    {/* Giữ nguyên phần Pagination */}
                     {!loading && !error && news.length > 0 && (
                         <div className="pagination">
                             <button
@@ -305,7 +302,6 @@ const HomePage = () => {
                     )}
                 </main>
 
-                {/* Thêm Stock Market Sidebar */}
                 <aside className="stock-sidebar">
     <div className="stock-widget">
         <h2 className="stock-widget-title">Market Overview</h2>
