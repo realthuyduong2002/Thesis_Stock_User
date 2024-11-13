@@ -1,3 +1,4 @@
+// AIConsultingPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Navbar from '../components/common/Navbar';
@@ -23,6 +24,7 @@ const AIConsultingPage = () => {
   const [firstMessages, setFirstMessages] = useState({});
   const messagesEndRef = useRef(null);
   const typingIntervalRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
   const toggleHistorySidebar = () => {
     setIsHistoryOpen(!isHistoryOpen);
@@ -36,6 +38,9 @@ const AIConsultingPage = () => {
     return () => {
       if (typingIntervalRef.current) {
         clearInterval(typingIntervalRef.current);
+      }
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
       }
     };
   }, []);
@@ -94,9 +99,16 @@ const AIConsultingPage = () => {
 
           setFirstMessages(firstMessagesMap);
 
-          if (response.data.length > 0) {
+          // Retrieve the last selected session from localStorage
+          const savedSessionId = localStorage.getItem('currentSession');
+          if (savedSessionId && response.data.some(session => session._id === savedSessionId)) {
+            setCurrentSession(savedSessionId);
+            fetchChatMessages(savedSessionId);
+          } else if (response.data.length > 0) {
+            // If no session is saved, default to the first session
             setCurrentSession(response.data[0]._id);
             fetchChatMessages(response.data[0]._id);
+            localStorage.setItem('currentSession', response.data[0]._id);
           }
         } catch (error) {
           console.error('Error fetching chat sessions or messages:', error);
@@ -139,6 +151,8 @@ const AIConsultingPage = () => {
           ...prev,
           [response.data._id]: 'New Chat Session'
         }));
+        // Save the new session as the current session in localStorage
+        localStorage.setItem('currentSession', response.data._id);
       } catch (error) {
         console.error('Error creating new chat session:', error);
       }
@@ -150,10 +164,46 @@ const AIConsultingPage = () => {
     fetchChatMessages(sessionId);
     setMessages([]);
     setGreetingVisible(true);
+    // Save the selected session to localStorage
+    localStorage.setItem('currentSession', sessionId);
   };
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
+  };
+
+  const typeBotMessage = (text) => {
+    let index = 0;
+    const typingSpeed = 50; // Milliseconds per character (faster)
+
+    typingIntervalRef.current = setInterval(() => {
+      index++;
+      const currentText = text.substring(0, index);
+      setMessages(prevMessages => {
+        const newMessages = [...prevMessages];
+        const lastMessage = newMessages[newMessages.length - 1];
+        if (lastMessage && lastMessage.sender === 'bot' && lastMessage.isTyping) {
+          newMessages[newMessages.length - 1] = { ...lastMessage, text: currentText };
+        } else {
+          newMessages.push({ text: currentText, sender: 'bot', isTyping: true });
+        }
+        return newMessages;
+      });
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+      if (index === text.length) {
+        clearInterval(typingIntervalRef.current);
+        setMessages(prevMessages => {
+          const newMessages = [...prevMessages];
+          const lastMessage = newMessages[newMessages.length - 1];
+          if (lastMessage && lastMessage.sender === 'bot') {
+            newMessages[newMessages.length - 1] = { ...lastMessage, isTyping: false };
+          }
+          return newMessages;
+        });
+        setIsTyping(false);
+      }
+    }, typingSpeed);
   };
 
   const handleSend = async () => {
@@ -163,7 +213,7 @@ const AIConsultingPage = () => {
       setInputValue('');
       setGreetingVisible(false);
       setIsTyping(true);
-  
+
       try {
         const token = localStorage.getItem('token');
         // Send the user message to the server
@@ -172,28 +222,32 @@ const AIConsultingPage = () => {
           { text: inputValue, sender: 'user' },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
-        // Fetch AI response from your AI server or API
-        const aiResponse = await axios.post('http://localhost:4000/api/ai/respond', { query: inputValue });
-        
-        // Add AI's response to the chat
-        const botMessage = { text: aiResponse.data.response, sender: 'bot' };
-        setMessages((prevMessages) => [...prevMessages, botMessage]);
-        
+
+        // Fetch AI response from the chatbot API
+        const aiResponse = await axios.post('http://localhost:5000/chatbot', { query: inputValue }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        // Start typing animation for AI's response
+        typeBotMessage(aiResponse.data.response);
+
       } catch (error) {
         console.error('Error handling message:', error);
-      } finally {
         setIsTyping(false);
       }
     }
-  };  
+  };
 
   return (
     <div className={styles.aiConsultingPage}>
       <Navbar />
+
       {/* History Sidebar */}
       <div className={`${styles.historySidebar} ${isHistoryOpen ? styles.open : ''}`}>
-        <h2>Conversation History</h2>
+        <h2 className={styles.sidebarTitle}>Conversation History</h2>
         <button className={styles.newChatButton} onClick={createNewChatSession}>New Chat</button>
         <div className={styles.chatSessionList}>
           {chatSessions.map((session) => (
@@ -208,64 +262,74 @@ const AIConsultingPage = () => {
               </span>
             </div>
           ))}
+          {chatSessions.length === 0 && (
+            <div className={styles.noSessions}>
+              No chat history available.
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Toggle Button for Sidebar inside Navbar */}
+      {/* Toggle Button for Sidebar */}
       <button className={styles.menuButton} onClick={toggleHistorySidebar}>
         <img src={menuIcon} alt="Menu" className={styles.menuIcon} />
       </button>
 
-      {/* Greeting */}
-      {greetingVisible && (
-        <h1>
-          <span className={styles.hello}>Hello </span>
-          <span className={styles.user}>{userData.username}</span>
-          <span className={styles.exclamation}>!</span>
-        </h1>
-      )}
-
-      {/* Messages Container */}
-      <div className={styles.messagesContainer}>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`${styles.message} ${message.sender === 'user' ? styles.userMessage : styles.botMessage}`}
-          >
-            {message.text}
-          </div>
-        ))}
-        {isTyping && (
-          <div className={styles.typingIndicator}>
-            <span></span>
-            <span></span>
-            <span></span>
+      {/* Main Chat Container */}
+      <div className={styles.mainContainer}>
+        {/* Greeting */}
+        {greetingVisible && (
+          <div className={styles.greetingContainer}>
+            <h1>
+              <span className={styles.hello}>Hello </span>
+              <span className={styles.user}>{userData.username}</span>
+              <span className={styles.exclamation}>!</span>
+            </h1>
           </div>
         )}
-        <div ref={messagesEndRef} />
-      </div>
 
-      {/* Chat Input */}
-      <div className={styles.chatInputContainer}>
-        <textarea
-          placeholder="Ask AI Consulting..."
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-          className={styles.chatInput}
-          rows={1}
-          disabled={isTyping || !currentSession}
-        />
-        <button
-          className={styles.sendButton}
-          onClick={handleSend}
-          disabled={isTyping || !currentSession}
-        >
-          <img src={upArrow} alt="Send" className={styles.upArrowIcon} />
-        </button>
+        {/* Messages Container */}
+        <div className={styles.messagesContainer}>
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`${styles.message} ${message.sender === 'user' ? styles.userMessage : styles.botMessage}`}
+            >
+              {message.text}
+            </div>
+          ))}
+          {isTyping && (
+            <div className={styles.typingIndicator}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Chat Input */}
+        <div className={styles.chatInputContainer}>
+          <textarea
+            placeholder="Ask AI Consulting..."
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+            className={styles.chatInput}
+            rows={1}
+            disabled={isTyping || !currentSession}
+          />
+          <button
+            className={styles.sendButton}
+            onClick={handleSend}
+            disabled={isTyping || !currentSession}
+          >
+            <img src={upArrow} alt="Send" className={styles.upArrowIcon} />
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default AIConsultingPage
+export default AIConsultingPage;
