@@ -1,22 +1,15 @@
-// src/pages/AIConsultingPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import Navbar from '../components/common/Navbar';
 import styles from '../pages/AIConsultingPage.module.css';
 import menuIcon from '../assets/menu.png';
 import upArrow from '../assets/up-arrow.png';
-import settingsIcon from '../assets/settings.png';
-import privacyIcon from '../assets/privacy.png';
-import helpIcon from '../assets/help.png';
-import addSwitchIcon from '../assets/add-switch.png';
 import defaultAvatar from '../assets/avatar.png';
-import Navbar from '../components/common/Navbar';
 
 const AIConsultingPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [greetingVisible, setGreetingVisible] = useState(true);
   const [messages, setMessages] = useState([]);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [userData, setUserData] = useState({
@@ -30,6 +23,10 @@ const AIConsultingPage = () => {
   const [firstMessages, setFirstMessages] = useState({});
   const messagesEndRef = useRef(null);
   const typingIntervalRef = useRef(null);
+
+  const toggleHistorySidebar = () => {
+    setIsHistoryOpen(!isHistoryOpen);
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -63,11 +60,6 @@ const AIConsultingPage = () => {
           });
         } catch (error) {
           console.error('Error fetching user data:', error);
-          setUserData((prevData) => ({
-            ...prevData,
-            avatar: defaultAvatar,
-            avatarTimestamp: new Date().getTime(),
-          }));
         }
       }
     };
@@ -86,11 +78,10 @@ const AIConsultingPage = () => {
           });
           setChatSessions(response.data);
 
-          // Fetch first message for each session
           const firstMessagePromises = response.data.map(session =>
             axios.get(`http://localhost:4000/api/chat/sessions/${session._id}/messages`, {
               headers: { Authorization: `Bearer ${token}` },
-              params: { limit: 1, sort: 'asc' } // Giả sử backend hỗ trợ phân trang và sắp xếp
+              params: { limit: 1, sort: 'asc' }
             })
           );
 
@@ -137,7 +128,7 @@ const AIConsultingPage = () => {
       try {
         const response = await axios.post(
           'http://localhost:4000/api/chat/sessions',
-          { title: 'New Chat Session' }, // Bạn có thể mở rộng để người dùng nhập tiêu đề
+          { title: 'New Chat Session' },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setChatSessions([response.data, ...chatSessions]);
@@ -154,6 +145,13 @@ const AIConsultingPage = () => {
     }
   };
 
+  const switchChatSession = (sessionId) => {
+    setCurrentSession(sessionId);
+    fetchChatMessages(sessionId);
+    setMessages([]);
+    setGreetingVisible(true);
+  };
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -165,126 +163,38 @@ const AIConsultingPage = () => {
       setInputValue('');
       setGreetingVisible(false);
       setIsTyping(true);
-
-      // Save user message to backend
+  
       try {
         const token = localStorage.getItem('token');
+        // Send the user message to the server
         await axios.post(
           `http://localhost:4000/api/chat/sessions/${currentSession}/messages`,
           { text: inputValue, sender: 'user' },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
-        // Kiểm tra nếu phiên trò chuyện chưa có tiêu đề hợp lệ
-        if (firstMessages[currentSession] === 'New Chat Session') {
-          await axios.put(
-            `http://localhost:4000/api/chat/sessions/${currentSession}`,
-            { title: inputValue },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-
-          // Cập nhật tiêu đề trong state
-          setFirstMessages(prev => ({
-            ...prev,
-            [currentSession]: inputValue
-          }));
-        }
+  
+        // Fetch AI response from your AI server or API
+        const aiResponse = await axios.post('http://localhost:4000/api/ai/respond', { query: inputValue });
+        
+        // Add AI's response to the chat
+        const botMessage = { text: aiResponse.data.response, sender: 'bot' };
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+        
       } catch (error) {
-        console.error('Error saving user message:', error);
-      }
-
-      const botMessage = { text: '', sender: 'bot' };
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
-
-      try {
-        const response = await axios.post('http://localhost:5000/chatbot', {
-          query: inputValue,
-        });
-
-        const botResponse = response.data.response;
-        typeMessage(botResponse);
-
-        // Save bot message to backend
-        const token = localStorage.getItem('token');
-        await axios.post(
-          `http://localhost:4000/api/chat/sessions/${currentSession}/messages`,
-          { text: botResponse, sender: 'bot' },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      } catch (error) {
-        console.error('Error communicating with the chatbot API:', error);
-        typeMessage('Xin lỗi, đã xảy ra lỗi khi xử lý yêu cầu của bạn.');
-
-        // Save error message to backend
-        const token = localStorage.getItem('token');
-        await axios.post(
-          `http://localhost:4000/api/chat/sessions/${currentSession}/messages`,
-          { text: 'Xin lỗi, đã xảy ra lỗi khi xử lý yêu cầu của bạn.', sender: 'bot' },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      }
-    }
-  };
-
-  const typeMessage = (fullText) => {
-    let currentIndex = 0;
-    const typingSpeed = 20;
-
-    typingIntervalRef.current = setInterval(() => {
-      currentIndex += 1;
-      const currentText = fullText.substring(0, currentIndex);
-
-      setMessages((prevMessages) => {
-        const updatedMessages = [...prevMessages];
-        if (updatedMessages.length === 0) return updatedMessages;
-        const lastMessage = { ...updatedMessages[updatedMessages.length - 1] };
-        lastMessage.text = currentText;
-        updatedMessages[updatedMessages.length - 1] = lastMessage;
-        return updatedMessages;
-      });
-
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-      if (currentIndex === fullText.length) {
-        clearInterval(typingIntervalRef.current);
-        typingIntervalRef.current = null;
+        console.error('Error handling message:', error);
+      } finally {
         setIsTyping(false);
       }
-    }, typingSpeed);
-  };
-
-  const toggleProfileMenu = () => {
-    setIsProfileMenuOpen(!isProfileMenuOpen);
-  };
-
-  const toggleHistorySidebar = () => {
-    setIsHistoryOpen(!isHistoryOpen);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
     }
-  };
-
-  const switchChatSession = (sessionId) => {
-    setCurrentSession(sessionId);
-    fetchChatMessages(sessionId);
-    setMessages([]);
-    setGreetingVisible(true);
-  };
+  };  
 
   return (
     <div className={styles.aiConsultingPage}>
+      <Navbar />
       {/* History Sidebar */}
       <div className={`${styles.historySidebar} ${isHistoryOpen ? styles.open : ''}`}>
         <h2>Conversation History</h2>
-        {isHistoryOpen && (
-          <button className={styles.newChatButton} onClick={createNewChatSession}>
-            New Chat
-          </button>
-        )}
+        <button className={styles.newChatButton} onClick={createNewChatSession}>New Chat</button>
         <div className={styles.chatSessionList}>
           {chatSessions.map((session) => (
             <div
@@ -293,111 +203,69 @@ const AIConsultingPage = () => {
               onClick={() => switchChatSession(session._id)}
             >
               <span className={styles.chatSessionTitle}>{firstMessages[session._id]}</span>
-              {isHistoryOpen && (
-                <span className={styles.chatSessionDate}>
-                  {new Date(session.createdAt).toLocaleString()}
-                </span>
-              )}
+              <span className={styles.chatSessionDate}>
+                {new Date(session.createdAt).toLocaleString()}
+              </span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Main Sidebar */}
-      <div className={styles.sidebar}>
-        <button
-          className={styles.menuButton}
-          aria-label="Toggle History Sidebar"
-          onClick={toggleHistorySidebar}
-        >
-          <img src={menuIcon} alt="Menu" className={styles.menuIcon} />
-        </button>
-      </div>
+      {/* Toggle Button for Sidebar inside Navbar */}
+      <button className={styles.menuButton} onClick={toggleHistorySidebar}>
+        <img src={menuIcon} alt="Menu" className={styles.menuIcon} />
+      </button>
 
-      {/* Main Content */}
-      <div className={styles.mainContent}>
-        {/* Sử dụng Navbar component và truyền prop isHistoryOpen */}
-        <Navbar userData={userData} toggleProfileMenu={toggleProfileMenu} isHistoryOpen={isHistoryOpen} />
+      {/* Greeting */}
+      {greetingVisible && (
+        <h1>
+          <span className={styles.hello}>Hello </span>
+          <span className={styles.user}>{userData.username}</span>
+          <span className={styles.exclamation}>!</span>
+        </h1>
+      )}
 
-        {/* Menu Profile */}
-        {isProfileMenuOpen && (
-          <div className={styles.profileMenu}>
-            <p className={styles.profileName}>{userData.username}</p>
-            <p className={styles.profileEmail}>{userData.email}</p>
-            <Link to={`/account/${localStorage.getItem('userId')}`} className={styles.manageAccount}>
-              Quản lý tài khoản
-            </Link>
-            <div className={styles.profileMenuOptions}>
-              <Link to="/settings" className={styles.profileMenuItem}>
-                <img src={settingsIcon} alt="Settings Icon" className={styles.menuIcon} /> Cài đặt
-              </Link>
-              <Link to="/privacy" className={styles.profileMenuItem}>
-                <img src={privacyIcon} alt="Privacy Icon" className={styles.menuIcon} /> Quyền riêng tư
-              </Link>
-              <Link to="/help" className={styles.profileMenuItem}>
-                <img src={helpIcon} alt="Help Icon" className={styles.menuIcon} /> Trợ giúp
-              </Link>
-              <Link to="/switch-accounts" className={styles.profileMenuItem}>
-                <img src={addSwitchIcon} alt="Add or Switch Accounts Icon" className={styles.menuIcon} /> Thêm hoặc chuyển tài khoản
-              </Link>
-            </div>
-            <button className={styles.logout}>Đăng xuất</button>
+      {/* Messages Container */}
+      <div className={styles.messagesContainer}>
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`${styles.message} ${message.sender === 'user' ? styles.userMessage : styles.botMessage}`}
+          >
+            {message.text}
+          </div>
+        ))}
+        {isTyping && (
+          <div className={styles.typingIndicator}>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         )}
+        <div ref={messagesEndRef} />
+      </div>
 
-        {greetingVisible && (
-          <h1>
-            <span className={styles.hello}>Hello </span>
-            <span className={styles.user}>{userData.username}</span>
-            <span className={styles.exclamation}>!</span>
-          </h1>
-        )}
-
-        <div className={styles.messagesContainer}>
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`${styles.message} ${message.sender === 'user' ? styles.userMessage : styles.botMessage}`}
-            >
-              {message.text.split('\n').map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              ))}
-            </div>
-          ))}
-          {isTyping && (
-            <div className={styles.typingIndicator}>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        <div className={styles.chatInputContainer}>
-          <textarea
-            placeholder="Ask AI Consulting..."
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            className={styles.chatInput}
-            rows={1}
-            disabled={isTyping || !currentSession}
-          />
-          <button
-            className={styles.sendButton}
-            onClick={handleSend}
-            disabled={isTyping || !currentSession}
-          >
-            <img src={upArrow} alt="Send" className={styles.upArrowIcon} />
-          </button>
-        </div>
+      {/* Chat Input */}
+      <div className={styles.chatInputContainer}>
+        <textarea
+          placeholder="Ask AI Consulting..."
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+          className={styles.chatInput}
+          rows={1}
+          disabled={isTyping || !currentSession}
+        />
+        <button
+          className={styles.sendButton}
+          onClick={handleSend}
+          disabled={isTyping || !currentSession}
+        >
+          <img src={upArrow} alt="Send" className={styles.upArrowIcon} />
+        </button>
       </div>
     </div>
   );
 };
 
-export default AIConsultingPage;
+export default AIConsultingPage
