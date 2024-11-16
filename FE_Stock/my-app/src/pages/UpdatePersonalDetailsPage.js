@@ -29,7 +29,26 @@ const UpdatePersonalDetailsPage = () => {
 
         axios.get(`http://localhost:4000/api/users/${id}`)
             .then(response => {
-                setUserData(response.data);
+                const user = response.data;
+                const phoneNumber = user.phoneNumber || '';
+
+                let extractedCountryCode = '';
+                let localPhoneNumber = phoneNumber;
+
+                // Assume phoneNumber starts with '+' followed by area code
+                if (phoneNumber.startsWith('+')) {
+                    const match = phoneNumber.match(/^\+(\d{1,3})/); // Depending on the area code, it can be 1-3 digits
+                    if (match) {
+                        extractedCountryCode = `+${match[1]}`;
+                        localPhoneNumber = phoneNumber.substring(match[0].length);
+                    }
+                }
+
+                setCountryCode(extractedCountryCode);
+                setUserData({ 
+                    ...user, 
+                    phoneNumber: localPhoneNumber 
+                });
                 setLoading(false);
             })
             .catch(error => {
@@ -73,7 +92,7 @@ const UpdatePersonalDetailsPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         try {
             const updatedData = {
                 firstName: userData.firstName,
@@ -81,17 +100,17 @@ const UpdatePersonalDetailsPage = () => {
                 preferredName: userData.preferredName,
                 dateOfBirth: userData.dateOfBirth,
                 gender: userData.gender,
-                phoneNumber: countryCode + userData.phoneNumber,
+                phoneNumber: countryCode + userData.phoneNumber, // Chỉ thêm countryCode một lần
                 country: userData.country,
             };
-    
+
             const response = await axios.put(`http://localhost:4000/api/users/${id}`, updatedData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-    
+
             console.log(response.data); // Confirm the response from the server
             alert('Personal details updated successfully!');
             navigate(`/account/${id}`);

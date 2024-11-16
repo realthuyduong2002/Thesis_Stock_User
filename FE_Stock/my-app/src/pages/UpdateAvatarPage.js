@@ -31,13 +31,13 @@ const UpdateAvatarPage = () => {
             const response = await axios.post(`http://localhost:4000/api/users/${id}/upload-avatar`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             });
             alert("Avatar updated successfully!");
     
             // Save the avatar's URL to localStorage so that the Header can use it
-            localStorage.setItem('userAvatar', response.data.avatar);
+            localStorage.setItem('userAvatar', response.data.avatarUrl);
             
             // Navigate users to the Account Page after a successful upload
             navigate(`/account/${id}`);

@@ -183,6 +183,11 @@ exports.updateProfile = async (req, res) => {
     try {
         const userId = req.params.id;
 
+        // Kiểm tra xem người dùng có quyền cập nhật thông tin này không
+        if (req.user.id !== userId && req.user.role !== 'admin') {
+            return res.status(403).json({ msg: 'Access denied: You can only update your own profile' });
+        }
+
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({ msg: 'Invalid user ID' });
         }
@@ -190,6 +195,21 @@ exports.updateProfile = async (req, res) => {
         let user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
+        }
+
+        // Kiểm tra trùng lặp email và username nếu cần
+        if (email && email !== user.email) {
+            const existingEmail = await User.findOne({ email });
+            if (existingEmail) {
+                return res.status(400).json({ msg: 'Email đã được sử dụng' });
+            }
+        }
+
+        if (username && username !== user.username) {
+            const existingUsername = await User.findOne({ username });
+            if (existingUsername) {
+                return res.status(400).json({ msg: 'Username đã được sử dụng' });
+            }
         }
 
         // Update fields if provided
@@ -225,7 +245,7 @@ exports.updateProfile = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                role: user.role, // Include role in response
+                role: user.role,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 preferredName: user.preferredName,
@@ -278,7 +298,12 @@ exports.getUserById = async (req, res) => {
 
 // Upload user avatar
 exports.uploadUserAvatar = async (req, res) => {
-    const userId = req.params.id; // Use req.params.id instead of req.user.id
+    const userId = req.params.id;
+
+    // Kiểm tra quyền cập nhật avatar
+    if (req.user.id !== userId && req.user.role !== 'admin') {
+        return res.status(403).json({ msg: 'Access denied: You can only update your own avatar' });
+    }
 
     try {
         if (!req.file) {

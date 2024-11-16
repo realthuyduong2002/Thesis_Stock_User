@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../../assets/logo.png';
-import defaultAvatar from '../../assets/avatar.png';
 import settingsIcon from '../../assets/settings.png';
 import privacyIcon from '../../assets/privacy.png';
 import helpIcon from '../../assets/help.png';
 import addSwitchIcon from '../../assets/add-switch.png';
+import defaultAvatar from '../../assets/avatar-default.jpg';
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,26 +21,28 @@ const Header = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         const storedUserId = localStorage.getItem('userId');
-        const storedUserAvatar = localStorage.getItem('userAvatar');
+
         if (token && storedUserId) {
             setIsLoggedIn(true);
             setUserId(storedUserId);
 
             // Fetch user data
-            axios.get(`http://localhost:4000/api/users/${storedUserId}`)
-                .then(response => {
+            axios
+                .get(`http://localhost:4000/api/users/${storedUserId}`)
+                .then((response) => {
                     setUserName(response.data.username || 'User');
                     setUserEmail(response.data.email || 'user@example.com');
-                    // Check if avatar exists, else set to defaultAvatar
+
+                    // Kiểm tra avatar, nếu không có thì sử dụng avatar mặc định
                     if (response.data.avatar) {
                         setUserAvatar(response.data.avatar);
                     } else {
                         setUserAvatar(defaultAvatar);
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error('Error fetching user data:', error);
-                    setUserAvatar(defaultAvatar);
+                    setUserAvatar(defaultAvatar); // Dùng avatar mặc định khi lỗi
                 });
         }
     }, []);
