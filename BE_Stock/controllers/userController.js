@@ -78,20 +78,28 @@ exports.login = async (req, res) => {
         // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid Credentials' });
+            console.error('User not found with email:', email);
+            return res.status(400).json({ message: 'User or Password not found!' });
         }
 
-        // Compare passwords
+        // Check if user is inactive before checking the password
+        if (user.status === 'Inactive') {
+            console.error('Inactive user trying to log in:', email);
+            return res.status(403).json({ message: 'Your account is inactive. Please contact support.' });
+        }
+
+        // Proper bcrypt comparison
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid Credentials' });
+            console.error('Password does not match for email:', email);
+            return res.status(400).json({ message: 'User or Password not found!' });
         }
 
         // Create JWT Payload
         const payload = {
             user: {
                 id: user.id,
-                role: user.role, // Bao gồm role trong payload
+                role: user.role, // Include role in payload
             },
         };
 
@@ -102,7 +110,7 @@ exports.login = async (req, res) => {
             { expiresIn: '1h' },
             (err, token) => {
                 if (err) throw err;
-                res.json({ token, userId: user.id, role: user.role }); // Bao gồm role trong phản hồi
+                res.json({ token, userId: user.id, role: user.role }); // Include role in response
             }
         );
     } catch (error) {
@@ -137,7 +145,21 @@ exports.getProfile = async (req, res) => {
             return res.status(404).json({ msg: 'User not found' });
         }
 
-        res.status(200).json(user);
+        res.status(200).json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role, // Include role in response
+            firstName: user.firstName,
+            lastName: user.lastName,
+            preferredName: user.preferredName,
+            gender: user.gender,
+            phoneNumber: user.phoneNumber,
+            country: user.country,
+            dateOfBirth: user.dateOfBirth,
+            avatar: user.avatar,
+            status: user.status
+        });
     } catch (error) {
         console.error('Error in getProfile:', error);
         res.status(500).send('Server Error');
@@ -201,16 +223,18 @@ exports.updateProfile = async (req, res) => {
             msg: 'Profile updated successfully',
             user: {
                 id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role, // Include role in response
                 firstName: user.firstName,
                 lastName: user.lastName,
                 preferredName: user.preferredName,
                 gender: user.gender,
                 phoneNumber: user.phoneNumber,
                 country: user.country,
-                username: user.username,
-                email: user.email,
                 dateOfBirth: user.dateOfBirth,
-                avatar: user.avatar
+                avatar: user.avatar,
+                status: user.status
             }
         });
     } catch (error) {
@@ -231,7 +255,21 @@ exports.getUserById = async (req, res) => {
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
         }
-        res.status(200).json(user);
+        res.status(200).json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role, // Include role in response
+            firstName: user.firstName,
+            lastName: user.lastName,
+            preferredName: user.preferredName,
+            gender: user.gender,
+            phoneNumber: user.phoneNumber,
+            country: user.country,
+            dateOfBirth: user.dateOfBirth,
+            avatar: user.avatar,
+            status: user.status
+        });
     } catch (error) {
         console.error('Error in getUserById:', error);
         res.status(500).send('Server Error');
@@ -275,7 +313,21 @@ exports.uploadUserAvatar = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password').sort({ createdAt: -1 });
-        res.status(200).json(users);
+        res.status(200).json(users.map(user => ({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role, // Include role in response
+            firstName: user.firstName,
+            lastName: user.lastName,
+            preferredName: user.preferredName,
+            gender: user.gender,
+            phoneNumber: user.phoneNumber,
+            country: user.country,
+            dateOfBirth: user.dateOfBirth,
+            avatar: user.avatar,
+            status: user.status
+        })));
     } catch (err) {
         console.error('Error fetching users:', err);
         res.status(500).json({ msg: 'Server Error' });

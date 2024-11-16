@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../components/Header';
 import styles from '../pages/UserDetails.module.css';
+import avatar from '../assets/avatar.jpg';
 
 const UserDetails = () => {
     const { userId } = useParams();
@@ -39,7 +40,7 @@ const UserDetails = () => {
         if (window.confirm(confirmationMessage)) {
             try {
                 const token = localStorage.getItem('token');
-                const updatedStatus = user.status === 'Active' ? 'Inactive' : 'Active'; // Toggle status
+                const updatedStatus = user.status === 'Active' ? 'Inactive' : 'Active';
                 await axios.put(`http://localhost:4000/api/users/${userId}/status`, 
                     { status: updatedStatus },
                     {
@@ -88,10 +89,11 @@ const UserDetails = () => {
                             <p><strong>First Name:</strong> {user.firstName}</p>
                             <p><strong>Last Name:</strong> {user.lastName}</p>
                             <p><strong>Preferred Name:</strong> {user.preferredName}</p>
-                            <p><strong>Date of Birth:</strong> {new Date(user.dob).toLocaleDateString()}</p>
+                            <p><strong>Date of Birth:</strong> {new Date(user.dateOfBirth).toLocaleDateString()}</p>
                             <p><strong>Gender:</strong> {user.gender}</p>
                             <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
                             <p><strong>Country:</strong> {user.country}</p>
+                            <p><strong>Role:</strong> {user.role}</p>
                         </div>
                     </div>
                     <div className={styles['status-section']}>
@@ -106,7 +108,7 @@ const UserDetails = () => {
                     </div>
                 </div>
                 <div className={styles['avatar-section']}>
-                    <img src={user.avatar || '/default-avatar.png'} alt="User Avatar" className={styles['avatar']} />
+                    <img src={user.avatar ? user.avatar : avatar} alt="User Avatar" className={styles['avatar']} />
                 </div>
             </div>
         </div>

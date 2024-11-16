@@ -122,3 +122,7 @@
     border-radius: 12px;
     font-weight: bold;
 }
+
+.status-section p strong {
+    margin-right: 5px;
+}
