@@ -1,8 +1,9 @@
+// src/components/DashboardCard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../components/DashboardCard.css';
 
-const DashboardCard = ({ stockCount }) => {
+const DashboardCard = ({ stockCount, visitCount }) => {
     const [userCount, setUserCount] = useState(0);
 
     useEffect(() => {
@@ -33,8 +34,8 @@ const DashboardCard = ({ stockCount }) => {
                 <strong>{stockCount}</strong>
             </div>
             <div className="card">
-                <span className="card-title">Transactions</span>
-                <strong>1,000</strong>
+                <span className="card-title">Website Visits</span>
+                <strong>{visitCount}</strong>
             </div>
         </div>
     );

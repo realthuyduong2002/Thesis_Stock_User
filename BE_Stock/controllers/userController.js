@@ -266,7 +266,9 @@ exports.updateProfile = async (req, res) => {
 // Get user by ID (public)
 exports.getUserById = async (req, res) => {
     try {
-        const userId = req.params.id;
+        const userId = req.params.id; // Sử dụng ':id' như đã định nghĩa trong route
+        console.log('Received userId:', userId); // Thêm log này để kiểm tra
+
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({ msg: 'Invalid user ID' });
         }
@@ -276,6 +278,7 @@ exports.getUserById = async (req, res) => {
             return res.status(404).json({ msg: 'User not found' });
         }
         res.status(200).json({
+            _id: user._id, // Thêm _id vào phản hồi
             id: user.id,
             username: user.username,
             email: user.email,
@@ -298,12 +301,7 @@ exports.getUserById = async (req, res) => {
 
 // Upload user avatar
 exports.uploadUserAvatar = async (req, res) => {
-    const userId = req.params.id;
-
-    // Kiểm tra quyền cập nhật avatar
-    if (req.user.id !== userId && req.user.role !== 'admin') {
-        return res.status(403).json({ msg: 'Access denied: You can only update your own avatar' });
-    }
+    const userId = req.params.id; // Use req.params.id instead of req.user.id
 
     try {
         if (!req.file) {
@@ -339,6 +337,7 @@ exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password').sort({ createdAt: -1 });
         res.status(200).json(users.map(user => ({
+            _id: user._id, // Thêm _id vào phản hồi
             id: user.id,
             username: user.username,
             email: user.email,

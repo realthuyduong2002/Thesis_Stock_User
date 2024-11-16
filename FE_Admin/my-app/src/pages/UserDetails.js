@@ -1,3 +1,4 @@
+// UserDetails.js
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -6,25 +7,35 @@ import styles from '../pages/UserDetails.module.css';
 import avatar from '../assets/avatar.jpg';
 
 const UserDetails = () => {
-    const { userId } = useParams();
+    const { userId } = useParams(); // Đảm bảo rằng 'userId' trùng với route parameter
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
+            if (!userId) {
+                setError('No user ID provided.');
+                setLoading(false);
+                return;
+            }
+
             const token = localStorage.getItem('token');
             try {
                 const response = await axios.get(`http://localhost:4000/api/users/${userId}`, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
                 setUser(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching user details:", error);
-                setError('Error fetching user details');
+                if (error.response) {
+                    setError(error.response.data.msg || 'Error fetching user details');
+                } else {
+                    setError('Error fetching user details');
+                }
                 setLoading(false);
             }
         };
@@ -33,6 +44,8 @@ const UserDetails = () => {
     }, [userId]);
 
     const updateStatus = async () => {
+        if (!user) return;
+
         const confirmationMessage = user.status === 'Active' 
             ? "Are you sure you want to mark this user as Inactive?" 
             : "Are you sure you want to mark this user as Active?";
@@ -41,18 +54,23 @@ const UserDetails = () => {
             try {
                 const token = localStorage.getItem('token');
                 const updatedStatus = user.status === 'Active' ? 'Inactive' : 'Active';
-                await axios.put(`http://localhost:4000/api/users/${userId}/status`, 
+                const response = await axios.put(`http://localhost:4000/api/users/${userId}/status`, 
                     { status: updatedStatus },
                     {
                         headers: {
-                            Authorization: `Bearer ${token}`
+                            'Authorization': `Bearer ${token}`
                         }
                     }
                 );
                 setUser((prevUser) => ({ ...prevUser, status: updatedStatus }));
+                alert(response.data.msg);
             } catch (error) {
                 console.error("Error updating status:", error);
-                alert("Failed to update status.");
+                if (error.response) {
+                    alert(error.response.data.msg || "Failed to update status.");
+                } else {
+                    alert("Failed to update status.");
+                }
             }
         }
     };    
@@ -75,6 +93,15 @@ const UserDetails = () => {
         );
     }
 
+    if (!user) {
+        return (
+            <div className={styles['user-details-page']}>
+                <Header />
+                <p>User not found</p>
+            </div>
+        );
+    }
+
     return (
         <div className={styles['user-details-page']}>
             <Header />
@@ -83,7 +110,7 @@ const UserDetails = () => {
                     <div className={styles['user-info-section']}>
                         <h2>User Information</h2>
                         <div className={styles['user-info']}>
-                            <p><strong>User ID:</strong> {user._id}</p>
+                            <p><strong>User ID:</strong> {user._id}</p> {/* Sử dụng _id đã được bao gồm */}
                             <p><strong>Username:</strong> {user.username}</p>
                             <p><strong>Email:</strong> {user.email}</p>
                             <p><strong>First Name:</strong> {user.firstName}</p>

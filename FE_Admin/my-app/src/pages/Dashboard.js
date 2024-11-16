@@ -1,10 +1,12 @@
+// src/pages/Dashboard.js
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import Header from '../components/Header';
-import LineChart from '../components/LineChart';
+// import LineChart from '../components/VisitChart'; // Loại bỏ import này
 import StockTable from '../components/StockTable';
 import DashboardCard from '../components/DashboardCard';
 import axios from 'axios';
 import '../pages/Dashboard.css';
+import useVisit from '../hooks/useVisit'; // Import hook useVisit
 
 const Dashboard = ({ isAdmin }) => {
     // Manage shared state for stocks and related information
@@ -15,6 +17,10 @@ const Dashboard = ({ isAdmin }) => {
     const [chartData, setChartData] = useState({});
     const [loadingChart, setLoadingChart] = useState(false);
     const isFetchingRef = useRef(false);
+    const [userCount, setUserCount] = useState(0); // Thêm state userCount
+
+    // Hook to get visit count
+    const visitCount = useVisit();
 
     // List of stock symbols
     const stockSymbols = useMemo(() => [
@@ -188,6 +194,28 @@ const Dashboard = ({ isAdmin }) => {
         return () => clearInterval(interval);
     }, [fetchAllStockData]);
 
+    useEffect(() => {
+        const fetchUserCount = async () => {
+            const token = localStorage.getItem('token'); // Retrieve token from localStorage
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            try {
+                const response = await axios.get('http://localhost:4000/api/users/count', {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                console.log('User count response:', response.data); // Debugging: check response data
+                setUserCount(response.data.count); // Update state với số lượng người dùng
+            } catch (error) {
+                console.error('Error fetching user count:', error.response?.data || error.message);
+            }
+        };
+
+        fetchUserCount();
+    }, []);
+
     // Handler to expand or collapse rows
     const handleRowClick = async (symbol) => {
         const isExpanded = expandedRows.includes(symbol);
@@ -357,11 +385,12 @@ const Dashboard = ({ isAdmin }) => {
             <div className="dashboard-content">
                 <Header />
                 <div className="centered-content">
-                    {/* Pass the stock count to DashboardCard */}
-                    <DashboardCard stockCount={stocks.length} />
-                    <div className="line-chart-container">
-                        <LineChart />
-                    </div>
+                    {/* Pass the stock count, user count and visit count to DashboardCard */}
+                    <DashboardCard stockCount={stocks.length} userCount={userCount} visitCount={visitCount} />
+                    {/* Loại bỏ VisitChart */}
+                    {/* <div className="line-chart-container">
+                        <VisitChart visits={visits} /> 
+                    </div> */}
                     {/* Pass stock data and handlers to StockTable */}
                     <div className="stock-table-container">
                         <StockTable

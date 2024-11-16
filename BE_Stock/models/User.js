@@ -72,6 +72,10 @@ const UserSchema = new mongoose.Schema({
         enum: ['Active', 'Inactive'],
         default: 'Active',
     },
-});
+    visitCount: {
+        type: Number,
+        default: 0,
+    },
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

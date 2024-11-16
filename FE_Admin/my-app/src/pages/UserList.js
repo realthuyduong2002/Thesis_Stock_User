@@ -13,7 +13,7 @@ const UserList = () => {
             try {
                 const response = await axios.get('http://localhost:4000/api/users', {
                     headers: {
-                        Authorization: `Bearer ${token}` // Include token in request
+                        'Authorization': `Bearer ${token}` // Include token in request
                     }
                 });
                 setUsers(response.data); // Update state with user data
@@ -21,6 +21,10 @@ const UserList = () => {
                 console.error('Error fetching users:', error);
                 if (error.response && error.response.status === 401) {
                     alert('Unauthorized access. Please log in as admin.');
+                } else if (error.response && error.response.data.msg) {
+                    alert(error.response.data.msg);
+                } else {
+                    alert('Error fetching users.');
                 }
             }
         };
@@ -44,7 +48,11 @@ const UserList = () => {
                         </thead>
                         <tbody>
                             {users.map((user, index) => (
-                                <tr key={user._id} onClick={() => navigate(`/users/${user._id}`)} style={{ cursor: 'pointer' }}>
+                                <tr 
+                                    key={user._id} 
+                                    onClick={() => navigate(`/users/${user._id}`)} 
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <td>{index + 1}</td>
                                     <td>{user.username}</td>
                                     <td>{user.email}</td>
