@@ -174,7 +174,7 @@ const AIConsultingPage = () => {
 
   const typeBotMessage = (text) => {
     let index = 0;
-    const typingSpeed = 50; // Milliseconds per character (faster)
+    const typingSpeed = 30; // Decreased typing speed to 30ms per character
 
     typingIntervalRef.current = setInterval(() => {
       index++;
@@ -213,27 +213,41 @@ const AIConsultingPage = () => {
       setInputValue('');
       setGreetingVisible(false);
       setIsTyping(true);
-
+  
       try {
         const token = localStorage.getItem('token');
-        // Send the user message to the server
+        
+        // Send user's message to the server
         await axios.post(
           `http://localhost:4000/api/chat/sessions/${currentSession}/messages`,
           { text: inputValue, sender: 'user' },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-
-        // Fetch AI response from the chatbot API
-        const aiResponse = await axios.post('http://localhost:5000/chatbot', { query: inputValue }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
+  
+        // Get response from chatbot API
+        const aiResponse = await axios.post(
+          'http://localhost:5000/chatbot',
+          { query: inputValue },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
           }
-        });
-
-        // Start typing animation for AI's response
-        typeBotMessage(aiResponse.data.response);
-
+        );
+  
+        const botText = aiResponse.data.response;
+  
+        // Send bot's message to the server
+        await axios.post(
+          `http://localhost:4000/api/chat/sessions/${currentSession}/messages`,
+          { text: botText, sender: 'bot' },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+  
+        // Display bot's response with typing effect
+        typeBotMessage(botText);
+  
       } catch (error) {
         console.error('Error handling message:', error);
         setIsTyping(false);
@@ -256,10 +270,15 @@ const AIConsultingPage = () => {
               className={`${styles.chatSessionItem} ${currentSession === session._id ? styles.activeSession : ''}`}
               onClick={() => switchChatSession(session._id)}
             >
-              <span className={styles.chatSessionTitle}>{firstMessages[session._id]}</span>
-              <span className={styles.chatSessionDate}>
-                {new Date(session.createdAt).toLocaleString()}
-              </span>
+              <div className={styles.sessionHeader}>
+                <img src={userData.avatar} alt="Avatar" className={styles.sessionAvatar} />
+                <div className={styles.sessionInfo}>
+                  <span className={styles.chatSessionTitle}>{firstMessages[session._id]}</span>
+                  <span className={styles.chatSessionDate}>
+                    {new Date(session.createdAt).toLocaleString()}
+                  </span>
+                </div>
+              </div>
             </div>
           ))}
           {chatSessions.length === 0 && (
@@ -293,9 +312,17 @@ const AIConsultingPage = () => {
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`${styles.message} ${message.sender === 'user' ? styles.userMessage : styles.botMessage}`}
+              className={`${styles.messageWrapper} ${message.sender === 'user' ? styles.userMessage : styles.botMessage}`}
             >
-              {message.text}
+              {message.sender === 'bot' && (
+                <img src={defaultAvatar} alt="Bot Avatar" className={styles.messageAvatar} />
+              )}
+              <div className={styles.messageContent}>
+                <div className={styles.messageText}>{message.text}</div>
+              </div>
+              {message.sender === 'user' && (
+                <img src={userData.avatar} alt="User Avatar" className={styles.messageAvatar} />
+              )}
             </div>
           ))}
           {isTyping && (
