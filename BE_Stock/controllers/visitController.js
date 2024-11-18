@@ -3,6 +3,14 @@ const Visit = require('../models/Visit');
 // Hàm tăng số lượt truy cập
 exports.incrementVisit = async (req, res) => {
     try {
+        // Kiểm tra nguồn yêu cầu (origin hoặc referer)
+        const allowedOrigin = 'http://localhost:3000';
+        const origin = req.headers.origin || req.headers.referer;
+
+        if (origin !== allowedOrigin) {
+            return res.status(403).json({ msg: 'Access denied. Increment only allowed from localhost:3000' });
+        }
+
         let visit = await Visit.findOne();
         if (!visit) {
             visit = new Visit();

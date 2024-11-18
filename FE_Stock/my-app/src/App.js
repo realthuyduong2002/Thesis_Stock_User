@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
@@ -12,7 +12,23 @@ import ArticleDetailPage from './pages/ArticleDetailPage';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import AnalysisPage from './pages/AnalysisPage';
 import MarketPage from './pages/MarketPage';
+
 function App() {
+    useEffect(() => {
+        const updateVisitCount = async () => {
+            try {
+                await fetch('http://localhost:4000/api/users/increment-visit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            } catch (error) {
+                console.error('Error updating visit count:', error);
+            }
+        };
+
+        updateVisitCount();
+    }, []);
+
     return (
         <Router>
             <Routes>
