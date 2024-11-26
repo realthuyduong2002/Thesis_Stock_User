@@ -14,6 +14,7 @@ const Header = () => {
     const [userId, setUserId] = useState(null);
     const [userName, setUserName] = useState('User');
     const [userEmail, setUserEmail] = useState('user@example.com');
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
     const [userAvatar, setUserAvatar] = useState(defaultAvatar);
     const [avatarTimestamp, setAvatarTimestamp] = useState(new Date().getTime());
@@ -59,6 +60,17 @@ const Header = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
+    const handleSearchInputChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSearchKeyPress = (e) => {
+        if (e.key === 'Enter' && searchQuery.trim() !== '') {
+            localStorage.setItem('searchQuery', searchQuery);
+            navigate('/ai-consulting');
+        }
+    };
+
     return (
         <header className="header">
             <Link to="/">
@@ -69,6 +81,9 @@ const Header = () => {
                     type="text"
                     placeholder="Search for news, symbols or companies..."
                     className="search-bar"
+                    value={searchQuery}
+                    onChange={handleSearchInputChange}
+                    onKeyPress={handleSearchKeyPress}
                 />
                 <i className="fas fa-search search-icon"></i>
             </div>

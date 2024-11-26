@@ -1,4 +1,3 @@
-// AIConsultingPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Navbar from '../components/common/Navbar';
@@ -29,6 +28,15 @@ const AIConsultingPage = () => {
   const toggleHistorySidebar = () => {
     setIsHistoryOpen(!isHistoryOpen);
   };
+
+  useEffect(() => {
+    const searchQuery = localStorage.getItem('searchQuery');
+    if (searchQuery) {
+      setInputValue(searchQuery);
+      handleSend(searchQuery);
+      localStorage.removeItem('searchQuery');
+    }
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -213,17 +221,17 @@ const AIConsultingPage = () => {
       setInputValue('');
       setGreetingVisible(false);
       setIsTyping(true);
-  
+
       try {
         const token = localStorage.getItem('token');
-        
+
         // Send user's message to the server
         await axios.post(
           `http://localhost:4000/api/chat/sessions/${currentSession}/messages`,
           { text: inputValue, sender: 'user' },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
+
         // Get response from chatbot API
         const aiResponse = await axios.post(
           'http://localhost:5000/chatbot',
@@ -235,19 +243,19 @@ const AIConsultingPage = () => {
             }
           }
         );
-  
+
         const botText = aiResponse.data.response;
-  
+
         // Send bot's message to the server
         await axios.post(
           `http://localhost:4000/api/chat/sessions/${currentSession}/messages`,
           { text: botText, sender: 'bot' },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
+
         // Display bot's response with typing effect
         typeBotMessage(botText);
-  
+
       } catch (error) {
         console.error('Error handling message:', error);
         setIsTyping(false);
