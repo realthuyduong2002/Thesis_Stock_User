@@ -39,10 +39,12 @@ function App() {
           <Header />
           <Routes>
             <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+            {/* Đảm bảo khi chưa đăng nhập sẽ chuyển hướng đến trang login */}
             <Route
               path="/"
               element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
             />
+            {/* Các route khác, yêu cầu phải đăng nhập mới có thể truy cập */}
             <Route
               path="/dashboard"
               element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
