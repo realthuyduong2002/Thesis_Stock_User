@@ -182,7 +182,7 @@ const AIConsultingPage = () => {
 
   const typeBotMessage = (text) => {
     let index = 0;
-    const typingSpeed = 30; // Decreased typing speed to 30ms per character
+    const typingSpeed = 35; // Decreased typing speed to 30ms per character
 
     typingIntervalRef.current = setInterval(() => {
       index++;
