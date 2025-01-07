@@ -1,9 +1,8 @@
-// AccountPage.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import styles from './AccountPage.module.css';
-import Header from '../components/common/Header';
+import Navbar from '../components/common/Navbar';
 import defaultAvatar from '../assets/avatar-default.jpg';
 
 const AccountPage = () => {
@@ -92,7 +91,7 @@ const AccountPage = () => {
 
     return (
         <div className={styles.accountPage}>
-            <Header />
+            <Navbar />
             <nav className={styles.navbar}>
                 <a href="#personal-info" className={styles.navLink}>Personal information</a>
                 <a href="#security" className={styles.navLink}>Security</a>
