@@ -10,7 +10,7 @@
 /* Navbar Container */
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     background-color: var(--navbar-bg);
     padding: 15px 40px;
@@ -18,6 +18,10 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+}
+
+.navbar-brand {
+    margin-right: 20px;
 }
 
 /* Brand Styling */
@@ -38,13 +42,18 @@
 .navbar-links {
     list-style: none;
     display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0;
     padding: 0;
+    gap: 25px; 
+    flex-grow: 1;
 }
+
 
 /* Individual Navbar Link Items */
 .navbar-links li {
-    margin-left: 25px;
+    margin: 0;
 }
 
 /* Navbar Links Styling */
@@ -97,15 +106,15 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
     .navbar {
-        padding: 15px 20px;
+        flex-direction: column;
     }
 
-    .navbar-links li {
-        margin-left: 15px;
+    .navbar-brand {
+        margin-bottom: 10px;
     }
 
-    .navbar-brand a {
-        font-size: 1.5em;
+    .navbar-links {
+        gap: 15px;
     }
 }
 
@@ -146,4 +155,27 @@
     .navbar-links a {
         padding: 8px 10px;
     }
+}
+
+.auth-links {
+    display: flex;
+    align-items: center;
+}
+
+.auth-links a {
+    margin-right: 10px;
+}
+
+.manageAccount {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    color: #333;
+    background-color: #d3f8d3;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 8px;
 }

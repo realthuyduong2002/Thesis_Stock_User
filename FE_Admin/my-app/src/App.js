@@ -30,6 +30,8 @@ function App() {
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
   };
+  console.log('Checkpoint: isAuthenticated log is running');
+  console.log('isAuthenticated:', isAuthenticated); // <-- Thêm dòng này
 
   return (
     <Router>
@@ -38,26 +40,23 @@ function App() {
         <div className="main-content">
           <Header />
           <Routes>
-            <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-            {/* Đảm bảo khi chưa đăng nhập sẽ chuyển hướng đến trang login */}
-            <Route
-              path="/"
-              element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
-            />
-            {/* Các route khác, yêu cầu phải đăng nhập mới có thể truy cập */}
-            <Route
-              path="/dashboard"
-              element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/users"
-              element={isAuthenticated ? <UserList /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/users/:userId"
-              element={isAuthenticated ? <UserDetails /> : <Navigate to="/login" />}
-            />
-          </Routes>
+  {/* Route login */}
+  <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+
+  {/* Route yêu cầu đăng nhập */}
+  <Route
+    path="/dashboard"
+    element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+  />
+  <Route
+    path="/users"
+    element={isAuthenticated ? <UserList /> : <Navigate to="/login" />}
+  />
+  <Route
+    path="/users/:userId"
+    element={isAuthenticated ? <UserDetails /> : <Navigate to="/login" />}
+  />
+</Routes> 
         </div>
       </div>
     </Router>

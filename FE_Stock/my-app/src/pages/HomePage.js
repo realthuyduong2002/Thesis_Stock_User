@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Header from '../components/common/Header';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import '../pages/HomePage.css';
@@ -185,7 +184,6 @@ const HomePage = () => {
     return (
         <div className="homepage">
             <Navbar />
-            <Header />    
             <div className="page-content">
                 <main className="main-content">
                     {loading && <p className="loading">Loading news...</p>}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Header from '../components/common/Header';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -19,7 +18,6 @@ const ArticleDetailPage = () => {
         return (
             <div>
                 <Navbar />
-                <Header />
                 <main className="main-content">
                     <button onClick={handleBack} className="back-button">
                         <FaArrowLeft /> Back to News
@@ -34,7 +32,6 @@ const ArticleDetailPage = () => {
     return (
         <div>
             <Navbar />
-            <Header />
             <main className="main-content">
                 <button onClick={handleBack} className="back-button">
                     <FaArrowLeft />
