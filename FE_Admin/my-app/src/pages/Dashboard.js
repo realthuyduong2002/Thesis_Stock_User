@@ -1,15 +1,13 @@
 // src/pages/Dashboard.js
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import Header from '../components/Header';
-// import LineChart from '../components/VisitChart'; // Loại bỏ import này
 import StockTable from '../components/StockTable';
 import DashboardCard from '../components/DashboardCard';
 import axios from 'axios';
 import '../pages/Dashboard.css';
-import useVisit from '../hooks/useVisit'; // Import hook useVisit
+import useVisit from '../hooks/useVisit';
 
 const Dashboard = ({ isAdmin }) => {
-    // Manage shared state for stocks and related information
     const [stocks, setStocks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
@@ -17,12 +15,10 @@ const Dashboard = ({ isAdmin }) => {
     const [chartData, setChartData] = useState({});
     const [loadingChart, setLoadingChart] = useState(false);
     const isFetchingRef = useRef(false);
-    const [userCount, setUserCount] = useState(0); // Thêm state userCount
+    const [userCount, setUserCount] = useState(0);
 
-    // Hook to get visit count
     const visitCount = useVisit();
 
-    // List of stock symbols
     const stockSymbols = useMemo(() => [
         'NVDA', 'INTC', 'PLTR', 'TSLA', 'AAPL', 'BBD', 'T', 'SOFI',
         'WBD', 'SNAP', 'NIO', 'BTG', 'F', 'AAL', 'NOK', 'BAC',
@@ -35,7 +31,10 @@ const Dashboard = ({ isAdmin }) => {
 
     const RAPIDAPI_KEY = process.env.REACT_APP_RAPIDAPI_KEY;
 
-    // Functions to save and load data from localStorage
+    if (!RAPIDAPI_KEY) {
+        console.error('REACT_APP_RAPIDAPI_KEY is not set. Please set it in your .env file.');
+    }
+
     const saveStocksToLocalStorage = (stocksData) => {
         try {
             const serializedData = JSON.stringify(stocksData);
@@ -56,8 +55,8 @@ const Dashboard = ({ isAdmin }) => {
         }
     };
 
-    // Function to fetch stock data from API
     const fetchStockData = async (symbol) => {
+        if (!RAPIDAPI_KEY) return;
         const options = {
             method: 'GET',
             url: `https://realstonks.p.rapidapi.com/stocks/${symbol}/advanced`,
@@ -83,9 +82,7 @@ const Dashboard = ({ isAdmin }) => {
                                     price: data.lastPrice !== undefined ? data.lastPrice : stock.price,
                                     change: data.percentChange !== undefined ? (data.percentChange * 100) : stock.change,
                                     volume: data.volume !== undefined ? data.volume.toLocaleString() : stock.volume,
-                                    // Add more detailed data fields if needed
                                     priceChange: data.priceChange || stock.priceChange,
-                                    // Add new fields if API provides
                                     lastPrice: data.lastPrice,
                                     percentChange: data.percentChange,
                                     bidPrice: data.bidPrice,
@@ -111,16 +108,13 @@ const Dashboard = ({ isAdmin }) => {
                         return updatedStocks;
                     }
 
-                    // Add new stock if it doesn't exist
                     const newStock = {
                         symbol: data.symbol || symbol,
                         companyName: data.symbolName || symbol,
                         price: data.lastPrice !== undefined ? data.lastPrice : 'N/A',
                         change: data.percentChange !== undefined ? (data.percentChange * 100) : 0,
                         volume: data.volume !== undefined ? data.volume.toLocaleString() : '0',
-                        // Initialize other detailed data fields
                         priceChange: data.priceChange || 'N/A',
-                        // Add new fields if API provides
                         lastPrice: data.lastPrice,
                         percentChange: data.percentChange,
                         bidPrice: data.bidPrice,
@@ -152,8 +146,8 @@ const Dashboard = ({ isAdmin }) => {
         }
     };
 
-    // Function to fetch all stock data with speed control
     const fetchAllStockData = useCallback(async () => {
+        if (!RAPIDAPI_KEY) return;
         if (isFetchingRef.current) {
             console.warn('Fetch operation already in progress.');
             return;
@@ -166,7 +160,6 @@ const Dashboard = ({ isAdmin }) => {
             for (let i = 0; i < stockSymbols.length; i++) {
                 const symbol = stockSymbols[i];
                 await fetchStockData(symbol);
-                // Wait 1.5 seconds between requests to comply with the speed limit
                 await new Promise(resolve => setTimeout(resolve, 1500));
             }
         } catch (error) {
@@ -176,7 +169,7 @@ const Dashboard = ({ isAdmin }) => {
             setLoading(false);
             setUpdating(false);
         }
-    }, [stockSymbols]);
+    }, [stockSymbols, RAPIDAPI_KEY]);
 
     useEffect(() => {
         const savedStocks = loadStocksFromLocalStorage();
@@ -189,14 +182,14 @@ const Dashboard = ({ isAdmin }) => {
 
         const interval = setInterval(() => {
             fetchAllStockData();
-        }, 15 * 60 * 1000); // Refresh every 15 minutes
+        }, 15 * 60 * 1000);
 
         return () => clearInterval(interval);
     }, [fetchAllStockData]);
 
     useEffect(() => {
         const fetchUserCount = async () => {
-            const token = localStorage.getItem('token'); // Retrieve token from localStorage
+            const token = localStorage.getItem('token');
             if (!token) {
                 console.error('No token found');
                 return;
@@ -206,8 +199,8 @@ const Dashboard = ({ isAdmin }) => {
                 const response = await axios.get('http://localhost:4000/api/users/count', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                console.log('User count response:', response.data); // Debugging: check response data
-                setUserCount(response.data.count); // Update state với số lượng người dùng
+                console.log('User count response:', response.data);
+                setUserCount(response.data.count);
             } catch (error) {
                 console.error('Error fetching user count:', error.response?.data || error.message);
             }
@@ -216,7 +209,6 @@ const Dashboard = ({ isAdmin }) => {
         fetchUserCount();
     }, []);
 
-    // Handler to expand or collapse rows
     const handleRowClick = async (symbol) => {
         const isExpanded = expandedRows.includes(symbol);
         if (isExpanded) {
@@ -229,8 +221,8 @@ const Dashboard = ({ isAdmin }) => {
         }
     };
 
-    // Function to fetch chart data from API
     const fetchChartData = async (symbol) => {
+        if (!RAPIDAPI_KEY) return;
         setLoadingChart(true);
         const fixedRange = '1d';
         const options = {
@@ -385,13 +377,7 @@ const Dashboard = ({ isAdmin }) => {
             <div className="dashboard-content">
                 <Header />
                 <div className="centered-content">
-                    {/* Pass the stock count, user count and visit count to DashboardCard */}
                     <DashboardCard stockCount={stocks.length} userCount={userCount} visitCount={visitCount} />
-                    {/* Loại bỏ VisitChart */}
-                    {/* <div className="line-chart-container">
-                        <VisitChart visits={visits} /> 
-                    </div> */}
-                    {/* Pass stock data and handlers to StockTable */}
                     <div className="stock-table-container">
                         <StockTable
                             stocks={stocks}
