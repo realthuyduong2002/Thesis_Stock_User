@@ -91,3 +91,114 @@ a:hover {
 }
 
 /* Additional styles for other components if needed */
+
+
+
+.app {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+/*
+
+Css of analysis page 
+*/
+
+
+/* General styles */
+body {
+  margin: 0;
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+/* Dashboard container */
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* Controls container */
+.controls {
+  flex: 1 1 300px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.controls h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #2c3e50;
+}
+
+.controls select,
+.controls button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.controls select:focus,
+.controls button:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+.controls button {
+  background: #4caf50;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.controls button:hover {
+  background: #45a049;
+}
+
+/* Chart container */
+.chart {
+  flex: 2 1 600px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chart h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #2c3e50;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+.chart-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background for the chart */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 800px;
+}
