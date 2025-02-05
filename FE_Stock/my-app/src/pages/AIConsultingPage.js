@@ -182,11 +182,11 @@ const AIConsultingPage = () => {
 
   const typeBotMessage = (text) => {
     let index = 0;
-    const typingSpeed = 35; // Decreased typing speed to 30ms per character
-
-    typingIntervalRef.current = setInterval(() => {
-      index++;
-      const currentText = text.substring(0, index);
+    const typingSpeed = 20;
+  
+    
+    const typeCharacter = () => {
+      const currentText = text.substring(0, index + 1); 
       setMessages(prevMessages => {
         const newMessages = [...prevMessages];
         const lastMessage = newMessages[newMessages.length - 1];
@@ -197,10 +197,14 @@ const AIConsultingPage = () => {
         }
         return newMessages;
       });
+  
+      // Scroll đến cuối mỗi lần nhả chữ
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-      if (index === text.length) {
-        clearInterval(typingIntervalRef.current);
+  
+      if (index < text.length - 1) {
+        index++;
+        typingTimeoutRef.current = setTimeout(typeCharacter, typingSpeed);
+      } else {
         setMessages(prevMessages => {
           const newMessages = [...prevMessages];
           const lastMessage = newMessages[newMessages.length - 1];
@@ -211,8 +215,12 @@ const AIConsultingPage = () => {
         });
         setIsTyping(false);
       }
-    }, typingSpeed);
+    };
+  
+    // Bắt đầu gõ
+    typingTimeoutRef.current = setTimeout(typeCharacter, typingSpeed);
   };
+  
 
   const handleSend = async () => {
     if (inputValue.trim() !== '' && currentSession) {
